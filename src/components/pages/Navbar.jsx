@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/router'; // Updated import
 import Link from 'next/link'; // Updated import
-import { Moon, Sun } from "lucide-react"; // Add icon imports
+import { Moon, Sun, LogOut, LayoutDashboard, Upload, Users } from "lucide-react"; // Add all needed icons
 import { useTheme } from "next-themes"; // Add theme hook import
 import { Button } from '@/components/ui/button';
 import {
@@ -23,14 +23,12 @@ const Navbar = () => {
 
   const isPublicLookup = pathname === '/';
   const isAdminLogin = pathname === '/admin/login';
-//   const isAdminSection = pathname.startsWith('/admin/') && !isAdminLogin;
-  const isAdminSection = true; // Assume admin section for now, replace with actual logic
-//   const isPublicReport = pathname.startsWith('/progress'); // Adjust if your report path is different
-  const isPublicReport = false ;
+  const isAdminSection = pathname.startsWith('/admin/') && !isAdminLogin;
+  const isMyAccount = pathname === '/my-account';
+  const isPublicReport = pathname.startsWith('/progress');
 
   const getAppName = () => {
-    if (isAdminLogin) return "Arcade Progress Checker - Admin";
-    if (isAdminSection) return "Arcade Progress Checker - Admin";
+    if (isAdminLogin || isAdminSection) return "Arcade Progress Checker - Admin";
     return "Arcade Progress Checker";
   };
 
@@ -62,69 +60,95 @@ const Navbar = () => {
     );
   }
 
-  return (
-    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Left Side: App Logo/Name */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-xl font-bold text-gray-800 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300">
-              {getAppName()}
-            </Link>
-          </div>
+  const handleLogout = async () => {
+    // Add actual logout logic here
+    console.log("Logout clicked");
+    alert('Logging out...');
+    // router.push('/admin/login');
+  };
 
-          {/* Right Side: Conditional Links/Buttons */}
-          <div className="flex items-center space-x-4">
-            {isPublicLookup && (
+  return (
+    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-gray-700">
+      <div className="container flex h-16 items-center justify-between">
+        {/* Left Side: App Logo/Name */}
+        <div className="flex items-center">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <span className="text-xl font-bold text-gray-800 dark:text-gray-100">
+              {getAppName()}
+            </span>
+          </Link>
+
+          {/* Admin Navigation - show only in admin section */}
+          {isAdminSection && isAdminLoggedIn && (
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6">
+              <Link href="/admin/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
+                pathname === '/admin/dashboard' 
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
+                  : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+              }`}>
+                <LayoutDashboard size={16} /> Dashboard
+              </Link>
+              <Link href="/admin/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
+                pathname === '/admin/upload' 
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
+                  : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+              }`}>
+                <Upload size={16} /> Upload Report
+              </Link>
+              <Link href="/admin/participants" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
+                pathname === '/admin/participants' 
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
+                  : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+              }`}>
+                <Users size={16} /> Participants
+              </Link>
+            </nav>
+          )}
+        </div>
+
+        {/* Right Side: Conditional Links/Buttons */}
+        <div className="flex items-center space-x-4">
+          {isPublicLookup && (
+            <>
+              <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
+                <Link href="/my-account">My Account</Link>
+              </Button>
               <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
                 <Link href="/admin/login">Admin Login</Link>
               </Button>
-            )}
+            </>
+          )}
 
-            {(isPublicReport || isAdminLogin) && (
-              <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
-                <Link href="/">Back to Lookup</Link>
+          {isMyAccount && (
+            <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
+              <Link href="/">Back to Lookup</Link>
+            </Button>
+          )}
+
+          {(isPublicReport || isAdminLogin) && (
+            <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
+              <Link href="/">Back to Lookup</Link>
+            </Button>
+          )}
+
+          {isAdminSection && isAdminLoggedIn && (
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-600 dark:text-gray-300 hidden sm:inline">Welcome, Admin</span>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                onClick={handleLogout}
+              >
+                <LogOut size={16} className="mr-1" /> Logout
               </Button>
-            )}
-
-            {isAdminSection && isAdminLoggedIn && (
-              <>
-                {/* Admin Navigation */}
-                <div className="hidden md:flex items-center space-x-4">
-                  <Link href="/admin/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    pathname === '/admin/dashboard' 
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
-                      : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-                  }`}>Dashboard</Link>
-                  <Link href="/admin/upload" className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    pathname === '/admin/upload' 
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
-                      : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-                  }`}>Upload Report</Link>
-                  <Link href="/admin/participants" className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    pathname === '/admin/participants' 
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
-                      : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-                  }`}>Participants</Link>
-                </div>
-
-                {/* Admin User Menu */}
-                <div className="flex items-center space-x-2">
-                  <ThemeToggle />
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Welcome, Admin</span>
-                  {/* Add actual logout functionality here */}
-                  <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200" onClick={() => alert('Logout clicked!')}>Logout</Button>
-                </div>
-              </>
-            )}
-            {/* If not admin section, still show theme toggle */}
-            {!isAdminSection && (
-              <ThemeToggle />
-            )}
-          </div>
+            </div>
+          )}
+          
+          {/* Theme toggle always visible */}
+          <ThemeToggle />
         </div>
       </div>
-      {/* Add mobile menu container here if implementing */}
     </nav>
   );
 };

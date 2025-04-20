@@ -1,6 +1,7 @@
 import Head from 'next/head';
-import AdminLayout from '@/components/layout/AdminLayout';
+import AdminLayout from '@/components/pages/Admin/AdminLayout';
 import DashboardBody from '@/components/pages/Admin/Dashboard/DashboardBody';
+import { Toaster } from 'react-hot-toast';
 // Add authentication wrapper here later if needed
 // import { withAuth } from '@/utils/withAuth'; // Example
 
@@ -14,7 +15,7 @@ const AdminDashboardPage = () => {
                 <DashboardBody />
             </AdminLayout>
 
-            
+            <Toaster position="bottom-right" />
         </>
     );
 };
