@@ -7,7 +7,7 @@ import appwrite from '@/lib/appwrite';
 
 const GlobalContext = createContext();
 
-export const GlobalContextProvider = ({ children }) => {
+const GlobalContextProvider = ({ children }) => {
     const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false); // Placeholder for authentication state
     const [isFacilitatorLoggedIn, setIsFacilitatorLoggedIn] = useState(false); // Placeholder for authentication state
     const [user, setUser] = useState(null); // Placeholder for user name
@@ -22,10 +22,10 @@ export const GlobalContextProvider = ({ children }) => {
 
             setUser(userData); // Set user
 
-            if (userData.lablels && userData.lablels.includes("admin"))
+            if (userData?.lablels && userData.lablels.includes("admin"))
                 setIsAdminLoggedIn(true); // Set admin logged in state
 
-            if (userData.lablels && userData.lablels.includes("facilitator"))
+            if (userData?.lablels && userData.lablels.includes("facilitator"))
                 setIsFacilitatorLoggedIn(false); // Set user logged in state
 
         } catch (error) {
@@ -48,5 +48,5 @@ const useGlobalContext = () => {
     return context;
 }
 
-export { GlobalContextProvider, useGlobalContext };
+export { GlobalContext, GlobalContextProvider, useGlobalContext };
 // This context will be used to manage global state such as authentication and user information.
