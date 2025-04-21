@@ -20,8 +20,15 @@ export default [
         path: "/admin/facilitators"
     },
     {
-        name:"Add New Facilitator",
-        path:"/admin/facilitators/new"
+        name: "Add New Facilitator",
+        path: "/admin/facilitators/new"
     },
-    
+    {
+        name: "View All Reports",
+        path: "/facilitator/reports"
+    },
+    {
+        name: "Upload Report",
+        path: "/facilitator/reports/upload"
+    },
 ]

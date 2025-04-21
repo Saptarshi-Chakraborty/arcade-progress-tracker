@@ -6,8 +6,13 @@ import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react'; // Import useEffect
 import appwrite from '@/lib/appwrite'; // Import Appwrite config
 import { toast } from 'react-hot-toast'; // Import toast if needed later
+import { useRouter } from 'next/router';
+import { useGlobalContext } from '@/contexts/GlobalProvider';
 
 const LoginBody = () => {
+    const router = useRouter(); // Initialize router for navigation
+    const { user } = useGlobalContext(); // Get user from global context
+
     const [step, setStep] = useState(1); // 1 for email, 2 for OTP
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
@@ -18,6 +23,10 @@ const LoginBody = () => {
     const [isClient, setIsClient] = useState(false); // State to track client-side mount
 
     useEffect(() => {
+        if (user) {
+            router.push("/my-account"); // Redirect if user is already logged in
+        }
+
         // This effect runs only on the client after the component mounts
         setIsClient(true);
     }, []);
@@ -74,16 +83,17 @@ const LoginBody = () => {
             console.log('Appwrite Session:', session); // Log session details
             setMessage('Login successful!');
             // Handle successful login (e.g., redirect, update auth context)
-            toast.success('Login Successful!');
+            router.push("/my-account");
+
             // Example: Redirect after a short delay
             // setTimeout(() => { window.location.href = '/dashboard'; }, 1500);
         } catch (error) {
             console.error('Appwrite Verify OTP Error:', error);
             // Provide more specific error messages based on Appwrite error codes
-            if (error.code === 401) { // Example: Unauthorized / Invalid credentials
-                 setMessage('Invalid or expired OTP. Please try again.');
+            if (error.code === 401) {  // Example: Unauthorized / Invalid credentials
+                setMessage('Invalid or expired OTP. Please try again.');
             } else {
-                 setMessage(error.message || 'Failed to verify OTP. Please try again.');
+                setMessage(error.message || 'Failed to verify OTP. Please try again.');
             }
         } finally {
             setIsLoading(false);
@@ -154,7 +164,7 @@ const LoginBody = () => {
                         </p>
                         {/* Display Security Phrase */}
                         {securityPhrase && (
-                             <div className="p-3 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 rounded-md text-center">
+                            <div className="p-3 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 rounded-md text-center">
                                 <p className="text-sm font-medium text-blue-800 dark:text-blue-200">Security Phrase:</p>
                                 <p className="text-lg font-bold text-blue-900 dark:text-blue-100 mt-1">{securityPhrase}</p>
                                 <p className="text-xs text-blue-700 dark:text-blue-300 mt-2">
@@ -162,7 +172,7 @@ const LoginBody = () => {
                                 </p>
                             </div>
                         )}
-                         <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-center text-gray-600 dark:text-gray-400">
                             Please enter the OTP below (expires in 5 minutes):
                         </p>
                         <div>
@@ -185,7 +195,7 @@ const LoginBody = () => {
                             {isLoading ? 'Verifying...' : 'VERIFY OTP'}
                         </Button>
                         <div className="text-center">
-                             <Button
+                            <Button
                                 type="button"
                                 variant="link"
                                 onClick={handleResendOtp}

@@ -34,8 +34,6 @@ const Navbar = () => {
     fetchUser();
   };
 
-  
-
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-gray-700">
@@ -50,14 +48,14 @@ const Navbar = () => {
 
           {/* Admin Navigation - show only in admin section for admin users */}
           {isAdminSection && isAdminLoggedIn && (
-            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6">
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6 cursor-pointer">
               <Link href="/admin/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/dashboard'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
                 <LayoutDashboard size={16} /> Dashboard
               </Link>
-              <Link href="/admin/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/upload'
+              <Link href="/facilitator/reports/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/upload'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
@@ -80,8 +78,8 @@ const Navbar = () => {
 
           {/* Facilitator Navigation - show when user is a facilitator and not in admin section */}
           {isFacilitatorLoggedIn && !isAdminSection && (
-            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6">
-              <Link href="/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/upload'
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6 cursor-pointer">
+              <Link href="/facilitator/reports/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/upload'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
@@ -104,9 +102,9 @@ const Navbar = () => {
         </div>
 
         {/* Right Side: Conditional Links/Buttons */}
-        <div className="flex items-center space-x-3">
-          {/* My Account button - visible to all logged in users */}
-          {user && (
+        <div className="flex items-center space-x-3 cursor-pointer">
+          {/* My Account button - visible to logged in users when not on the my-account page */}
+          {user && pathname !== '/my-account' && (
             <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
               <Link href="/my-account">
                 <User size={16} className="mr-1" /> My Account
@@ -128,7 +126,7 @@ const Navbar = () => {
             <Button
               variant="outline"
               size="sm"
-              className="border-destructive/50 text-destructive hover:bg-destructive/10"
+              className="border-destructive/50 text-destructive hover:bg-destructive/10 cursor-pointer"
               onClick={handleLogout}
             >
               <LogOut size={16} className="mr-1" /> Logout
@@ -136,7 +134,7 @@ const Navbar = () => {
           )}
 
           {/* Login button - shown when no user is logged in */}
-          {user === null && (
+          {user === null && pathname !== "/login" && (
             <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
               <Link href="/login">Login</Link>
             </Button>
@@ -157,7 +155,7 @@ function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="border-primary/20 dark:border-primary/20">
+        <Button variant="outline" size="icon" className="border-primary/20 dark:border-primary/20 cursor-pointer">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
