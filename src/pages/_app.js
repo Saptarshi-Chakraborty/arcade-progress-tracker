@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/contexts/theme-provider";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import "@/styles/globals.css";
+import { GlobalContextProvider } from "@/contexts/GlobalProvider";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -10,8 +11,14 @@ export default function App({ Component, pageProps }) {
       enableSystem
       disableTransitionOnChange
     >
-      <Component {...pageProps} />
-      <SpeedInsights />
+
+      <GlobalContextProvider>
+
+        <Component {...pageProps} />
+        <SpeedInsights />
+
+      </GlobalContextProvider>
+
     </ThemeProvider>
   )
 

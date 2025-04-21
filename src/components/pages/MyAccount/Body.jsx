@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"; // Assuming you have a Badge component
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import apppwrite from '@/lib/appwrite';
+import appwrite from '@/lib/appwrite';
 import {
     AlertCircle,
     CalendarDays,
@@ -36,7 +36,7 @@ const MyAccountBody = () => {
         setLoading(true);
         setError(null); // Reset error on refresh
         try {
-            const userData = await apppwrite.account.get(); // Fetch user data from Appwrite
+            const userData = await appwrite.account.get(); // Fetch user data from Appwrite
             setUser(userData);
             console.log(userData); // Log user data for debugging
         } catch (err) {

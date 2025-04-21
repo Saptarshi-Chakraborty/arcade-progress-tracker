@@ -12,7 +12,7 @@ client
 const database = new Databases(client);
 const account = new Account(client);
 
-const apppwrite = {
+const appwrite = {
     APPWRITE_PROJECT_ID,
     client,
     account,
@@ -21,4 +21,4 @@ const apppwrite = {
     ID, // <-- Add ID here
 }
 
-export default apppwrite;
+export default appwrite;

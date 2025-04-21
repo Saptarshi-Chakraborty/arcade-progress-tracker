@@ -11,7 +11,7 @@ export default function DashboardPage() {
     return (
         <>
             <Head>
-                <title>Dashboard | Arcade Progress Tracker</title>
+                <title>My Account | Arcade Progress Tracker</title>
             </Head>
             <Navbar />
 
