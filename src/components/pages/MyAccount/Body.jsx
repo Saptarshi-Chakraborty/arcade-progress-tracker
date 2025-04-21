@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"; // Assuming you have a Badge component
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import appwrite from '@/lib/appwrite';
+import { useGlobalContext } from "@/contexts/GlobalProvider";
 import {
     AlertCircle,
     CalendarDays,
@@ -18,7 +18,8 @@ import {
 import { useEffect, useState } from 'react';
 
 const MyAccountBody = () => {
-    const [user, setUser] = useState(null);
+    const { user, fetchUser, logoutUser, isAdminLoggedIn, isFacilitatorLoggedIn } = useGlobalContext();
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -32,27 +33,20 @@ const MyAccountBody = () => {
         }
     };
 
-    async function fetchUser() {
-        setLoading(true);
-        setError(null); // Reset error on refresh
-        try {
-            const userData = await appwrite.account.get(); // Fetch user data from Appwrite
-            setUser(userData);
-            console.log(userData); // Log user data for debugging
-        } catch (err) {
-            setError(err.message);
-            toast.error(`Failed to fetch user data: ${err.message}`); // Show error toast
-        } finally {
-            setLoading(false);
-        }
-    }
 
     useEffect(() => {
-        fetchUser();
+        if (!user) {
+            setLoading(true);
+            fetchUser().then(() => {
+                setLoading(false);
+            }).catch((err) => {
+                setLoading(false);
+                setError("Failed to fetch user data. Please try again.");
+                console.error(err); // Log the error for debugging
+            });
+        }
 
         return () => {
-            // Cleanup if needed
-            setUser(null);
             setLoading(false);
             setError(null);
         };
@@ -87,7 +81,21 @@ const MyAccountBody = () => {
                 ) : user ? (
                     <Card className="w-full max-w-2xl mx-auto"> {/* Center card and limit width */}
                         <CardHeader>
-                            <CardTitle className="text-2xl">Welcome, {user.name || 'User'}</CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="text-2xl">Welcome, {user.name || 'User'}</CardTitle>
+                                <div className="flex gap-2">
+                                    {isAdminLoggedIn && (
+                                        <Badge variant="default" className="bg-red-600 hover:bg-red-700">
+                                            Admin
+                                        </Badge>
+                                    )}
+                                    {isFacilitatorLoggedIn && (
+                                        <Badge variant="default" className="bg-yellow-600 hover:bg-yellow-700">
+                                            Facilitator
+                                        </Badge>
+                                    )}
+                                </div>
+                            </div>
                             <CardDescription className="flex items-center space-x-2 pt-1"> {/* Use flex for alignment */}
                                 <Mail className="h-4 w-4 text-muted-foreground" /> {/* Optional: Add mail icon */}
                                 <span>{user.email}</span>

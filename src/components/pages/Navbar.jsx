@@ -1,46 +1,41 @@
 "use client"; // Ensure this is a client component
 
 import React from 'react';
-import { useRouter } from 'next/router'; // Updated import
-import Link from 'next/link'; // Updated import
-import { Moon, Sun, LogOut, LayoutDashboard, Upload, Users } from "lucide-react"; // Add all needed icons
-import { useTheme } from "next-themes"; // Add theme hook import
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { Moon, Sun, LogOut, LayoutDashboard, Upload, Users, FileSpreadsheet, User } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // Add dropdown components
+} from "@/components/ui/dropdown-menu";
 import { useGlobalContext } from '@/contexts/GlobalProvider';
 
 const Navbar = () => {
-  const {user, fetchUser, isAdminLoggedIn, isFacilitatorLoggedIn} = useGlobalContext();
-  const router = useRouter(); 
+  const { user, fetchUser, logoutUser, isAdminLoggedIn, isFacilitatorLoggedIn } = useGlobalContext();
+  const router = useRouter();
+  const pathname = router.pathname;
   
-  const pathname = router.pathname; 
-  console.log('Current Pathname:', pathname); 
-
-  
-  const isPublicLookup = pathname === '/';
-  const isAdminLogin = pathname === '/admin/login';
-  const isAdminSection = pathname.startsWith('/admin/') && !isAdminLogin;
-  const isMyAccount = pathname === '/my-account';
-  const isPublicReport = pathname.startsWith('/progress');
+  // Determine the current section based on the pathname
+  const isAdminSection = pathname.startsWith('/admin');
 
   const getAppName = () => {
-    if (isAdminLogin || isAdminSection) return "Arcade Progress Checker - Admin";
-    return "Arcade Progress Checker";
+    if (isAdminSection && isAdminLoggedIn) return "Arcade Progress Tracker - Admin";
+    if (isFacilitatorLoggedIn) return "Arcade Progress Tracker - Facilitator";
+    return "Arcade Progress Tracker";
+  };
+
+  const handleLogout = async () => {
+    await logoutUser();
+    router.push('/');
+    fetchUser();
   };
 
   
 
-  const handleLogout = async () => {
-    // Add actual logout logic here
-    console.log("Logout clicked");
-    alert('Logging out...');
-    // router.push('/admin/login');
-  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-gray-700">
@@ -53,73 +48,100 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Admin Navigation - show only in admin section */}
+          {/* Admin Navigation - show only in admin section for admin users */}
           {isAdminSection && isAdminLoggedIn && (
             <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6">
-              <Link href="/admin/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
-                pathname === '/admin/dashboard' 
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
-                  : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-              }`}>
+              <Link href="/admin/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/dashboard'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
                 <LayoutDashboard size={16} /> Dashboard
               </Link>
-              <Link href="/admin/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
-                pathname === '/admin/upload' 
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
-                  : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-              }`}>
+              <Link href="/admin/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/upload'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
                 <Upload size={16} /> Upload Report
               </Link>
-              <Link href="/admin/participants" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
-                pathname === '/admin/participants' 
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100' 
-                  : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-              }`}>
+              <Link href="/admin/participants" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/participants'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
                 <Users size={16} /> Participants
+              </Link>
+              <Link href="/admin/facilitators" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname.startsWith('/admin/facilitators')
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
+                <User size={16} /> Facilitators
+              </Link>
+            </nav>
+          )}
+
+          {/* Facilitator Navigation - show when user is a facilitator and not in admin section */}
+          {isFacilitatorLoggedIn && !isAdminSection && (
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6">
+              <Link href="/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/upload'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
+                <Upload size={16} /> Upload Report
+              </Link>
+              <Link href="/participants" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/participants'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
+                <Users size={16} /> Participants
+              </Link>
+              <Link href="/reports" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/reports'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
+                <FileSpreadsheet size={16} /> Reports
               </Link>
             </nav>
           )}
         </div>
 
         {/* Right Side: Conditional Links/Buttons */}
-        <div className="flex items-center space-x-4">
-          {isPublicLookup && (
-            <>
-              <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
-                <Link href="/my-account">My Account</Link>
-              </Button>
-              <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
-                <Link href="/admin/login">Admin Login</Link>
-              </Button>
-            </>
-          )}
-
-          {isMyAccount && (
+        <div className="flex items-center space-x-3">
+          {/* My Account button - visible to all logged in users */}
+          {user && (
             <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
-              <Link href="/">Back to Lookup</Link>
+              <Link href="/my-account">
+                <User size={16} className="mr-1" /> My Account
+              </Link>
             </Button>
-          )}
-
-          {(isPublicReport || isAdminLogin) && (
-            <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
-              <Link href="/">Back to Lookup</Link>
-            </Button>
-          )}
-
-          {isAdminSection && isAdminLoggedIn && (
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600 dark:text-gray-300 hidden sm:inline">Welcome, Admin</span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
-                onClick={handleLogout}
-              >
-                <LogOut size={16} className="mr-1" /> Logout
-              </Button>
-            </div>
           )}
           
+          {/* Admin Panel button - shown to admin users when not in admin section */}
+          {isAdminLoggedIn && !isAdminSection && (
+            <Button asChild variant="outline" className="border-primary/50 text-primary">
+              <Link href="/admin/dashboard">
+                <LayoutDashboard size={16} className="mr-1" /> Admin Panel
+              </Link>
+            </Button>
+          )}
+
+          {/* Logout button - shown when user is logged in */}
+          {user && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-destructive/50 text-destructive hover:bg-destructive/10"
+              onClick={handleLogout}
+            >
+              <LogOut size={16} className="mr-1" /> Logout
+            </Button>
+          )}
+
+          {/* Login button - shown when no user is logged in */}
+          {user === null && (
+            <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600">
+              <Link href="/login">Login</Link>
+            </Button>
+          )}
+
           {/* Theme toggle always visible */}
           <ThemeToggle />
         </div>

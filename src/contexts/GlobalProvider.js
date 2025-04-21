@@ -37,8 +37,23 @@ const GlobalContextProvider = ({ children }) => {
         }
     }
 
+    async function logoutUser() {
+        let confirmLogout = confirm("Are you sure you want to log out?"); // Confirm logout action
+        if (!confirmLogout) return; // If not confirmed, exit function
+
+        try {
+            await appwrite.account.deleteSession('current'); // Delete current session
+            setUser(null); // Reset user state
+            setIsAdminLoggedIn(false); // Reset admin logged in state
+            setIsFacilitatorLoggedIn(false); // Reset user logged in state
+            toast.success("Logged out successfully"); // Show success message
+        } catch (error) {
+            console.error("Logout error:", error); // Log error if any
+        }
+    }
+
     return (
-        <GlobalContext.Provider value={{ user, setUser, fetchUser, isAdminLoggedIn, isFacilitatorLoggedIn }}>
+        <GlobalContext.Provider value={{ user, setUser, fetchUser, logoutUser, isAdminLoggedIn, isFacilitatorLoggedIn }}>
             {children}
         </GlobalContext.Provider>
     );

@@ -19,4 +19,9 @@ export default [
         name: "View All Facilitators",
         path: "/admin/facilitators"
     },
+    {
+        name:"Add New Facilitator",
+        path:"/admin/facilitators/new"
+    },
+    
 ]
