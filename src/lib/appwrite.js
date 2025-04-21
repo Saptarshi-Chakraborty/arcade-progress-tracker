@@ -1,4 +1,4 @@
-import { Client, Databases, Query, ID, Account } from 'appwrite';
+import { Client, Databases, Query, ID, Account, Permission, Role } from 'appwrite';
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
 const APPWRITE_PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
@@ -22,7 +22,8 @@ const appwrite = {
     database,
     Query,
     ID, // <-- Add ID here
-
+    Permission,
+    Role,
     APPWRITE_PROJECT_ID,
     DATABASE: {
         ID: APPWRITE_DATABASE_ID,

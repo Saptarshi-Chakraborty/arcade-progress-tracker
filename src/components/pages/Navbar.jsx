@@ -18,7 +18,7 @@ const Navbar = () => {
   const { user, fetchUser, logoutUser, isAdminLoggedIn, isFacilitatorLoggedIn } = useGlobalContext();
   const router = useRouter();
   const pathname = router.pathname;
-  
+
   // Determine the current section based on the pathname
   const isAdminSection = pathname.startsWith('/admin');
 
@@ -78,25 +78,28 @@ const Navbar = () => {
 
           {/* Facilitator Navigation - show when user is a facilitator and not in admin section */}
           {isFacilitatorLoggedIn && !isAdminSection && (
-            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6 cursor-pointer">
+            <nav className="hidden md:flex items-center space-x-2 lg:space-x-4 ml-6 cursor-pointer">
               <Link href="/facilitator/reports/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/upload'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
                 <Upload size={16} /> Upload Report
               </Link>
+
+              <Link href="/facilitator/reports" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/reports'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
+                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
+                }`}>
+                <FileSpreadsheet size={16} /> Reports
+              </Link>
+
               <Link href="/participants" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/participants'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
                 <Users size={16} /> Participants
               </Link>
-              <Link href="/reports" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/reports'
-                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
-                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-                }`}>
-                <FileSpreadsheet size={16} /> Reports
-              </Link>
+
             </nav>
           )}
         </div>
@@ -111,7 +114,7 @@ const Navbar = () => {
               </Link>
             </Button>
           )}
-          
+
           {/* Admin Panel button - shown to admin users when not in admin section */}
           {isAdminLoggedIn && !isAdminSection && (
             <Button asChild variant="outline" className="border-primary/50 text-primary">
