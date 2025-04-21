@@ -48,5 +48,5 @@ const useGlobalContext = () => {
     return context;
 }
 
-export { GlobalProvider, useGlobalContext };
+export { GlobalContextProvider, useGlobalContext };
 // This context will be used to manage global state such as authentication and user information.

@@ -1,4 +1,5 @@
 import Navbar from '@/components/pages/Navbar';
+import Footer from '../Footer';
 // Assume appwrite and auth context logic will be added later for user name and logout
 
 const AdminLayout = ({ children }) => {
@@ -8,11 +9,7 @@ const AdminLayout = ({ children }) => {
             <main className="flex-1 container py-8">
                 {children}
             </main>
-            <footer className="py-4 border-t dark:border-gray-700">
-                <div className="container text-center text-xs text-muted-foreground">
-                    © {new Date().getFullYear()} Arcade Progress Checker Admin Panel
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };

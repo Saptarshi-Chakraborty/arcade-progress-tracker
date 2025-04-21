@@ -15,4 +15,8 @@ export default [
         name: "Admin Dashboard",
         path: "/admin/dashboard"
     },
+    {
+        name: "View All Facilitators",
+        path: "/admin/facilitators"
+    },
 ]
