@@ -15,18 +15,22 @@ const GlobalContextProvider = ({ children }) => {
     async function fetchUser() {
         try {
             const userData = await appwrite.account.get(); // Fetch user data from Appwrite
-            if (!user.$id) {
+            console.log({ userData });
+
+            if (userData['$id'] == undefined) {
                 toast.error("User not logged in..."); // Show error if user is not logged in
-                return
+                return;
             }
 
             setUser(userData); // Set user
 
-            if (userData?.lablels && userData.lablels.includes("admin"))
+            let userRoles = userData['labels'] || []; // Get user roles
+
+            if (userRoles.includes("admin"))
                 setIsAdminLoggedIn(true); // Set admin logged in state
 
-            if (userData?.lablels && userData.lablels.includes("facilitator"))
-                setIsFacilitatorLoggedIn(false); // Set user logged in state
+            if (userRoles.includes("facilitator"))
+                setIsFacilitatorLoggedIn(true); // Set user logged in state
 
         } catch (error) {
             console.log("User not logged in...")

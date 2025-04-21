@@ -12,15 +12,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Add dropdown components
+import { useGlobalContext } from '@/contexts/GlobalProvider';
 
 const Navbar = () => {
-  const router = useRouter(); // Updated to use Next.js router
-  const pathname = router.pathname; // Updated to use Next.js router
-  console.log('Current Pathname:', pathname); // Debugging line
+  const {user, fetchUser, isAdminLoggedIn, isFacilitatorLoggedIn} = useGlobalContext();
+  const router = useRouter(); 
+  
+  const pathname = router.pathname; 
+  console.log('Current Pathname:', pathname); 
 
-  // Placeholder for authentication state - replace with actual auth logic
-  const isAdminLoggedIn = true; // Assume logged in for admin paths for now
-
+  
   const isPublicLookup = pathname === '/';
   const isAdminLogin = pathname === '/admin/login';
   const isAdminSection = pathname.startsWith('/admin/') && !isAdminLogin;
@@ -32,33 +33,7 @@ const Navbar = () => {
     return "Arcade Progress Checker";
   };
 
-  // Theme toggle component
-  function ThemeToggle() {
-    const { setTheme } = useTheme();
-
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon" className="border-primary/20 dark:border-primary/20">
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setTheme("light")}>
-            Light
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme("dark")}>
-            Dark
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme("system")}>
-            System
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  }
+  
 
   const handleLogout = async () => {
     // Add actual logout logic here
@@ -152,5 +127,33 @@ const Navbar = () => {
     </nav>
   );
 };
+
+// Theme toggle component
+function ThemeToggle() {
+  const { setTheme } = useTheme();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon" className="border-primary/20 dark:border-primary/20">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export default Navbar;

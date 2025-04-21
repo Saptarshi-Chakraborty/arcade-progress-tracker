@@ -1,3 +1,4 @@
+import AddNewFacilitatorBody from '@/components/pages/Admin/Facilitators/AddNew/AddNewFacilitatorBody';
 import ViewAllFacilitatorsBody from '@/components/pages/Admin/Facilitators/ViewAll/Body';
 import Footer from '@/components/pages/Footer';
 import Navbar from '@/components/pages/Navbar';
@@ -18,11 +19,11 @@ const AllFacilitators = () => {
     return (
         <>
             <Head>
-                <title>All Facilitators | Admin | Arcade Progress Tracker</title>
+                <title>Add New Facilitators | Admin | Arcade Progress Tracker</title>
             </Head>
 
             <Navbar />
-            <ViewAllFacilitatorsBody />
+            <AddNewFacilitatorBody />
             <Footer />
 
             <Toaster position="bottom-right" />
