@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalContext } from '@/contexts/GlobalProvider';
 import appwrite from '@/lib/appwrite';
-import { AlertCircle, Users, Award, Gamepad2, Brain, BookOpen, FileText, Search, RefreshCcw, Upload, Eye, Edit2, Trash2 } from 'lucide-react';
+import { AlertCircle, Users, Award, Gamepad2, Brain, BookOpen, FileText, Search, RefreshCcw, Upload, Eye, Edit2, Trash2, ChevronDown, ChevronUp, LineChart as LineChartIcon, BarChart as BarChartIcon, PieChart as PieChartIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import FacilitatorMilestones from './FacilitatorMilestones';
+import ChartVisualizations from './ChartVisualizations';
 
 const ViewAllReportsBody = () => {
     const [reports, setReports] = useState([]);
@@ -62,20 +63,18 @@ const ViewAllReportsBody = () => {
     const fetchReports = async () => {
         setIsLoading(true);
         try {
-            // Fetch reports from database
             const response = await appwrite.database.listDocuments(
                 appwrite.DATABASE.ID,
                 appwrite.DATABASE.COLLECTIONS.DAILY_REPORTS,
                 [
                     appwrite.Query.equal('facilitatorCode', facilitator ? facilitator.code.toUpperCase() : ''),
                     appwrite.Query.orderDesc('reportDate'),
-                    appwrite.Query.limit(100) // Adjust as needed
+                    appwrite.Query.limit(100)
                 ]
             );
 
             setReports(response.documents);
 
-            // Calculate statistics - use only the latest report
             let totalStats = {
                 totalParticipants: 0,
                 skillBadgesCompleted: 0,
@@ -85,9 +84,8 @@ const ViewAllReportsBody = () => {
                 totalReports: response.documents.length
             };
 
-            // If there's at least one report, use the latest (first) one for stats
             if (response.documents.length > 0) {
-                const latestReport = response.documents[0]; // First report is the latest due to orderDesc
+                const latestReport = response.documents[0];
                 totalStats = {
                     ...totalStats,
                     totalParticipants: latestReport.totalParticipants || 0,
@@ -130,9 +128,7 @@ const ViewAllReportsBody = () => {
         setSearchTerm(e.target.value);
     };
 
-    // Helper function to render deltas
     const renderDelta = (currentValue, index, reports, fieldName) => {
-        // Don't show delta for the last row (oldest report)
         if (index === reports.length - 1 || reports.length <= 1) return null;
 
         const nextValue = reports[index + 1][fieldName] || 0;
@@ -166,14 +162,13 @@ const ViewAllReportsBody = () => {
 
             if (response) {
                 toast.success('Report deleted successfully!');
-                fetchReports(); // Refresh the reports after deletion
+                fetchReports();
             }
         } catch (error) {
             console.error('Error deleting report:', error);
             toast.error('Failed to delete report');
         }
     }
-
 
     if (!user || !isFacilitatorLoggedIn) {
         return (
@@ -218,7 +213,6 @@ const ViewAllReportsBody = () => {
                 </div>
             )}
 
-            {/* Stats Cards */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
                 <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
                     Overall Statistics
@@ -275,14 +269,17 @@ const ViewAllReportsBody = () => {
                 </div>
             </div>
 
-            {/* Facilitator Milestones */}
             <FacilitatorMilestones
                 arcadeGamesCompleted={stats.arcadeGamesCompleted}
                 triviaGamesCompleted={stats.triviaGamesCompleted}
                 skillBadgesCompleted={stats.skillBadgesCompleted}
             />
 
-            {/* Reports Table */}
+            <ChartVisualizations 
+                reports={reports}
+                stats={stats}
+            />
+
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
                 <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
@@ -375,7 +372,6 @@ const ViewAllReportsBody = () => {
                                                         className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30 transition-colors"
                                                         title="View Details"
                                                         onClick={() => {
-                                                            /* Handle view details */
                                                             toast.success('View details functionality will be added soon');
                                                         }}
                                                     >
@@ -413,7 +409,7 @@ const ViewAllReportsBody = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                         {!isLoading && filteredReports.length > 0 ?
                             `Showing ${filteredReports.length} of ${reports.length} reports` :
-                            '\u00A0' /* Non-breaking space to maintain height */
+                            '\u00A0'
                         }
                     </p>
                 </div>

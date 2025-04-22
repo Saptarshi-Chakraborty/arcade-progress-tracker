@@ -83,7 +83,9 @@ const HomePageBody = () => {
                 appwrite.DATABASE.ID,
                 appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
                 [
-                    appwrite.Query.equal('email', user.email),
+
+                    // appwrite.Query.equal('email', user.email),
+                    appwrite.Query.equal('email', tryEmail), // Use the test email here
                     appwrite.Query.orderDesc('$createdAt'),
                 ]
             );
@@ -97,7 +99,7 @@ const HomePageBody = () => {
                 setLatestReport(null);
             }
             setHasFetched(true);
-            
+
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.error("Error fetching data");
@@ -258,7 +260,7 @@ const HomePageBody = () => {
                             <h3 className="font-medium text-gray-800 dark:text-gray-200">{latestReport.name}</h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400">{latestReport.email}</p>
                             {latestReport.skillBoostUrl && (
-                                <a 
+                                <a
                                     href={latestReport.skillBoostUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
