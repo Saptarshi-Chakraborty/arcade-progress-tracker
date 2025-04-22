@@ -20,7 +20,8 @@ import {
     Loader2,
     AlertCircle,
     User,
-    Clock
+    Clock,
+    ExternalLink
 } from 'lucide-react';
 import {
     BarChart,
@@ -83,7 +84,6 @@ const HomePageBody = () => {
                 appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
                 [
                     appwrite.Query.equal('email', user.email),
-                    // appwrite.Query.equal('email', tryEmail),
                     appwrite.Query.orderDesc('$createdAt'),
                 ]
             );
@@ -95,7 +95,6 @@ const HomePageBody = () => {
             } else {
                 setAllReports([]);
                 setLatestReport(null);
-                // toast.error("No reports found");
             }
             setHasFetched(true);
             
@@ -180,6 +179,24 @@ const HomePageBody = () => {
         }
     }, [latestReport]);
 
+    // Helper function to render deltas
+    const renderDelta = (currentValue, index, reports, fieldName) => {
+        // Don't show delta for the last row (oldest report)
+        if (index === reports.length - 1 || reports.length <= 1) return null;
+
+        const nextValue = reports[index + 1][fieldName] || 0;
+        const currentVal = currentValue || 0;
+        const delta = currentVal - nextValue;
+
+        if (delta === 0) {
+            return <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">(+0)</span>;
+        } else if (delta > 0) {
+            return <span className="ml-1 text-xs text-green-600 dark:text-green-400">(+{delta})</span>;
+        } else {
+            return <span className="ml-1 text-xs text-red-600 dark:text-red-400">({delta})</span>;
+        }
+    };
+
     if (!user) {
         return <WelcomeScreen />;
     }
@@ -240,6 +257,17 @@ const HomePageBody = () => {
                         <div>
                             <h3 className="font-medium text-gray-800 dark:text-gray-200">{latestReport.name}</h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400">{latestReport.email}</p>
+                            {latestReport.skillBoostUrl && (
+                                <a 
+                                    href={latestReport.skillBoostUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mt-1"
+                                >
+                                    <ExternalLink className="h-3 w-3" />
+                                    Your Skill Boost Profile
+                                </a>
+                            )}
                         </div>
                     </div>
 
@@ -561,10 +589,22 @@ const HomePageBody = () => {
                                         {allReports.map((report, index) => (
                                             <tr key={report.$id} className={index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700/30'}>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{formatDate(report.reportDate)}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.noOfSkillBadgesCompleted || 0}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.noOfArcadeGamesCompleted || 0}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.noOfTriviaGamesCompleted || 0}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.noOfLabFreeCoursesCompleted || 0}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                    {report.noOfSkillBadgesCompleted || 0}
+                                                    {renderDelta(report.noOfSkillBadgesCompleted, index, allReports, 'noOfSkillBadgesCompleted')}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                    {report.noOfArcadeGamesCompleted || 0}
+                                                    {renderDelta(report.noOfArcadeGamesCompleted, index, allReports, 'noOfArcadeGamesCompleted')}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                    {report.noOfTriviaGamesCompleted || 0}
+                                                    {renderDelta(report.noOfTriviaGamesCompleted, index, allReports, 'noOfTriviaGamesCompleted')}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                    {report.noOfLabFreeCoursesCompleted || 0}
+                                                    {renderDelta(report.noOfLabFreeCoursesCompleted, index, allReports, 'noOfLabFreeCoursesCompleted')}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

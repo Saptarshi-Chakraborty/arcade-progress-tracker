@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalContext } from '@/contexts/GlobalProvider';
 import appwrite from '@/lib/appwrite';
-import { AlertCircle, Users, Award, Gamepad2, Brain, BookOpen, FileText, Search, RefreshCcw, Upload } from 'lucide-react';
+import { AlertCircle, Users, Award, Gamepad2, Brain, BookOpen, FileText, Search, RefreshCcw, Upload, Eye, Edit2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -152,6 +152,28 @@ const ViewAllReportsBody = () => {
         formatDate(report.reportDate).toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    async function handleDeleteReport(reportId) {
+        if (!confirm('Are you sure you want to delete this report?')) return;
+        if (!reportId) return;
+
+        try {
+            const response = await appwrite.database.deleteDocument(
+                appwrite.DATABASE.ID,
+                appwrite.DATABASE.COLLECTIONS.DAILY_REPORTS,
+                reportId
+            );
+
+            if (response) {
+                toast.success('Report deleted successfully!');
+                fetchReports(); // Refresh the reports after deletion
+            }
+        } catch (error) {
+            console.error('Error deleting report:', error);
+            toast.error('Failed to delete report');
+        }
+    }
+
+
     if (!user || !isFacilitatorLoggedIn) {
         return (
             <div className="w-full p-4 sm:p-6">
@@ -281,9 +303,10 @@ const ViewAllReportsBody = () => {
                         </button>
 
                         <Link href="/facilitator/reports/upload"
-                            className="px-3 py-2 rounded-md bg-green-600 hover:bg-green-700 text-white transition-colors duration-200 flex items-center justify-center gap-1 text-sm"
+                            className="p-2 sm:px-3 sm:py-2 rounded-md bg-green-600 hover:bg-green-700 text-white transition-colors duration-200 flex items-center justify-center gap-1 text-sm"
+                            aria-label="Upload new report"
                         >
-                            <Upload className="h-4 w-4" /> Upload New
+                            <Upload className="h-4 w-4" /> <span className="hidden sm:inline">Upload New</span>
                         </Link>
                     </div>
                 </div>
@@ -301,12 +324,13 @@ const ViewAllReportsBody = () => {
                             <thead className="bg-gray-50 dark:bg-gray-900/50">
                                 <tr>
                                     <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
-                                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Facilitator Code</th>
                                     <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Participants</th>
                                     <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Skill Badges</th>
                                     <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Arcade Games</th>
                                     <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Trivia Games</th>
                                     <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Lab-Free Courses</th>
+                                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Access Code Redeemed</th>
+                                    <th scope="col" className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -314,7 +338,6 @@ const ViewAllReportsBody = () => {
                                     filteredReports.map((report, index) => (
                                         <tr key={report.$id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{formatDate(report.reportDate)}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.facilitatorCode}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                                 {report.totalParticipants || 0}
                                             </td>
@@ -334,11 +357,38 @@ const ViewAllReportsBody = () => {
                                                 {report.labFreeCoursesCompleted || 0}
                                                 {renderDelta(report.labFreeCoursesCompleted, index, filteredReports, 'labFreeCoursesCompleted')}
                                             </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {report.totalAccessCodeRedeemed || 0}
+                                                {renderDelta(report.totalAccessCodeRedeemed, index, filteredReports, 'totalAccessCodeRedeemed')}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                                                <div className="flex items-center justify-center space-x-2">
+                                                    <button
+                                                        className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30 transition-colors"
+                                                        title="View Details"
+                                                        onClick={() => {
+                                                            /* Handle view details */
+                                                            toast.success('View details functionality will be added soon');
+                                                        }}
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                    </button>
+
+
+                                                    <button
+                                                        className="p-1.5 rounded-md text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30 transition-colors"
+                                                        title="Delete Report"
+                                                        onClick={() => { handleDeleteReport(report.$id) }}
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="7" className="px-6 py-10 text-center text-sm text-gray-500 dark:text-gray-400">
+                                        <td colSpan="8" className="px-6 py-10 text-center text-sm text-gray-500 dark:text-gray-400">
                                             {reports.length === 0 ?
                                                 'No reports found. Start by uploading your first progress report.' :
                                                 'No reports match your search criteria.'
