@@ -8,6 +8,9 @@ import appwrite from '@/lib/appwrite';
 import DataTable from './DataTable';
 import Statistics from './Statistics';
 
+// Add delay helper function
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const UploadReportBody = () => {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
@@ -162,7 +165,7 @@ const UploadReportBody = () => {
           labFreeCoursesCompleted: 0,
           totalAccessCodeRedeemed: 0,
           totalMilestonesAchived: 0,
-          uploadedBy: user['$id'],
+          uploadedBy: facilitator['$id'],
         },
         [
           appwrite.Permission.update(appwrite.Role.user(user['$id'])),
@@ -223,6 +226,9 @@ const UploadReportBody = () => {
       const row = uploadedData[i];
       const result = await uploadIndividualReport(row, dailyReportRecord['$id'], date, facilitatorCode);
 
+      // Add a 500ms delay between uploads to handle rate limiting
+      await delay(500);
+
       setCompletedRecords(prev => prev + 1);
       setUploadProgress(Math.floor(((i + 1) / uploadedData.length) * 100));
 
@@ -247,6 +253,9 @@ const UploadReportBody = () => {
       for (let i = 0; i < errors.length; i++) {
         const row = errors[i];
         const result = await uploadIndividualReport(row, dailyReportRecord['$id'], date, facilitatorCode);
+        
+        // Add the same delay for retries
+        await delay(500);
 
         if (result) {
           totalParticipants++;
@@ -312,7 +321,7 @@ const UploadReportBody = () => {
       triviaGamesCompleted: String(reportData['Names of Completed Trivia Games'] ?? "").split('|').map(item => item.trim()).filter(item => item !== ""),
       noOfLabFreeCoursesCompleted: (reportData['# of Lab-free Courses Completed'] ?? "0") == "0" ? 0 : parseInt(reportData['# of Lab-free Courses Completed']),
       labFreeCoursesCompleted: String(reportData['Names of Completed Lab-free Courses'] ?? "").split('|').map(item => item.trim()).filter(item => item !== ""),
-      uploadedBy: user['$id'],
+      uploadedBy: facilitator['$id'],
       reportDate: date
     }
 

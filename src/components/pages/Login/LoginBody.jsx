@@ -29,7 +29,7 @@ const LoginBody = () => {
 
     useEffect(() => {
         if (user) {
-            router.push("/my-account");
+            router.push("/");
         }
         setIsClient(true);
     }, []);
@@ -81,7 +81,7 @@ const LoginBody = () => {
             toast.success('OTP verified successfully!');
             console.log('Appwrite Session:', session);
             setMessage('Login successful!');
-            router.push("/my-account");
+            router.push("/");
         } catch (error) {
             console.error('Appwrite Verify OTP Error:', error);
             if (error.code === 401) {

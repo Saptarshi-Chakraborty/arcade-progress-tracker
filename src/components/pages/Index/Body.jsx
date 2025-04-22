@@ -3,6 +3,7 @@
 import { useGlobalContext } from '@/contexts/GlobalProvider';
 import appwrite from '@/lib/appwrite';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { 
@@ -36,6 +37,7 @@ import {
     Pie,
     Cell
 } from 'recharts';
+import WelcomeScreen from '@/components/common/WelcomeScreen';
 
 const HomePageBody = () => {
     const router = useRouter();
@@ -79,8 +81,8 @@ const HomePageBody = () => {
                 appwrite.DATABASE.ID,
                 appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
                 [
-                    // appwrite.Query.equal('email', user.email),
-                    appwrite.Query.equal('email', tryEmail),
+                    appwrite.Query.equal('email', user.email),
+                    // appwrite.Query.equal('email', tryEmail),
                     appwrite.Query.orderDesc('$createdAt'),
                 ]
             );
@@ -92,7 +94,7 @@ const HomePageBody = () => {
             } else {
                 setAllReports([]);
                 setLatestReport(null);
-                toast.error("No reports found");
+                // toast.error("No reports found");
             }
             setHasFetched(true);
         } catch (error) {
@@ -144,17 +146,7 @@ const HomePageBody = () => {
     };
 
     if (!user) {
-        return (
-            <div className="w-full p-4 sm:p-6">
-                <div className="flex items-center justify-center min-h-[400px]">
-                    <div className="flex flex-col items-center text-center">
-                        <AlertCircle className="h-12 w-12 text-yellow-500 mb-4" />
-                        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Please login to view your progress</h2>
-                        <p className="mt-2 text-gray-600 dark:text-gray-400">You need to be logged in to access your personal dashboard.</p>
-                    </div>
-                </div>
-            </div>
-        );
+        return <WelcomeScreen />;
     }
 
     if (loading) {
@@ -199,7 +191,7 @@ const HomePageBody = () => {
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold dark:text-white">Your Progress Dashboard</h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Welcome back, {user.name || 'Participant'}! Here's your Cloud Arcade progress.
+                    Welcome back, {user.name || latestReport.name || 'Participant'} ! <br/>Here's your Google Cloud Arcade progress under the Facilitator Program.
                 </p>
             </div>
 

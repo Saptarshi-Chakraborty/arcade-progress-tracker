@@ -144,7 +144,7 @@ const Navbar = () => {
 
           {/* Logout button - shown when user is logged in on larger screens */}
           {user && (
-            <Button variant="outline" className="border-gray-300 dark:border-gray-600 hidden sm:flex" onClick={handleLogout}>
+            <Button variant="destructive" className="hidden sm:flex" onClick={handleLogout}>
               <LogOut size={16} className="mr-1" /> Logout
             </Button>
           )}

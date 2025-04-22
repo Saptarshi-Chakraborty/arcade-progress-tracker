@@ -74,24 +74,29 @@ const ViewAllReportsBody = () => {
 
             setReports(response.documents);
 
-            // Calculate statistics
-            const totalStats = response.documents.reduce((acc, report) => {
-                return {
-                    totalParticipants: acc.totalParticipants + (report.totalParticipants || 0),
-                    skillBadgesCompleted: acc.skillBadgesCompleted + (report.skillBadgesCompleted || 0),
-                    arcadeGamesCompleted: acc.arcadeGamesCompleted + (report.arcadeGamesCompleted || 0),
-                    triviaGamesCompleted: acc.triviaGamesCompleted + (report.triviaGamesCompleted || 0),
-                    labFreeCoursesCompleted: acc.labFreeCoursesCompleted + (report.labFreeCoursesCompleted || 0),
-                };
-            }, {
+            // Calculate statistics - use only the latest report
+            let totalStats = {
                 totalParticipants: 0,
                 skillBadgesCompleted: 0,
                 arcadeGamesCompleted: 0,
                 triviaGamesCompleted: 0,
                 labFreeCoursesCompleted: 0,
-            });
+                totalReports: response.documents.length
+            };
 
-            totalStats.totalReports = response.documents.length;
+            // If there's at least one report, use the latest (first) one for stats
+            if (response.documents.length > 0) {
+                const latestReport = response.documents[0]; // First report is the latest due to orderDesc
+                totalStats = {
+                    ...totalStats,
+                    totalParticipants: latestReport.totalParticipants || 0,
+                    skillBadgesCompleted: latestReport.skillBadgesCompleted || 0,
+                    arcadeGamesCompleted: latestReport.arcadeGamesCompleted || 0,
+                    triviaGamesCompleted: latestReport.triviaGamesCompleted || 0,
+                    labFreeCoursesCompleted: latestReport.labFreeCoursesCompleted || 0,
+                };
+            }
+
             setStats(totalStats);
 
         } catch (error) {
@@ -122,6 +127,24 @@ const ViewAllReportsBody = () => {
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
+    };
+
+    // Helper function to render deltas
+    const renderDelta = (currentValue, index, reports, fieldName) => {
+        // Don't show delta for the last row (oldest report)
+        if (index === reports.length - 1 || reports.length <= 1) return null;
+
+        const nextValue = reports[index + 1][fieldName] || 0;
+        const currentVal = currentValue || 0;
+        const delta = currentVal - nextValue;
+
+        if (delta === 0) {
+            return <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">(+0)</span>;
+        } else if (delta > 0) {
+            return <span className="ml-1 text-xs text-green-600 dark:text-green-400">(+{delta})</span>;
+        } else {
+            return <span className="ml-1 text-xs text-red-600 dark:text-red-400">({delta})</span>;
+        }
     };
 
     const filteredReports = reports.filter(report =>
@@ -288,15 +311,29 @@ const ViewAllReportsBody = () => {
                             </thead>
                             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 {filteredReports.length > 0 ? (
-                                    filteredReports.map((report) => (
+                                    filteredReports.map((report, index) => (
                                         <tr key={report.$id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{formatDate(report.reportDate)}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.facilitatorCode}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.totalParticipants || 0}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.skillBadgesCompleted || 0}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.arcadeGamesCompleted || 0}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.triviaGamesCompleted || 0}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{report.labFreeCoursesCompleted || 0}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {report.totalParticipants || 0}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {report.skillBadgesCompleted || 0}
+                                                {renderDelta(report.skillBadgesCompleted, index, filteredReports, 'skillBadgesCompleted')}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {report.arcadeGamesCompleted || 0}
+                                                {renderDelta(report.arcadeGamesCompleted, index, filteredReports, 'arcadeGamesCompleted')}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {report.triviaGamesCompleted || 0}
+                                                {renderDelta(report.triviaGamesCompleted, index, filteredReports, 'triviaGamesCompleted')}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {report.labFreeCoursesCompleted || 0}
+                                                {renderDelta(report.labFreeCoursesCompleted, index, filteredReports, 'labFreeCoursesCompleted')}
+                                            </td>
                                         </tr>
                                     ))
                                 ) : (
