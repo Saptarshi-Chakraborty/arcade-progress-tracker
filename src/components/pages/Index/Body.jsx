@@ -6,14 +6,14 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
-import { 
-    Award, 
-    Gamepad2, 
-    Brain, 
-    BookOpen, 
-    Trophy, 
-    ChevronDown, 
-    ChevronUp, 
+import {
+    Award,
+    Gamepad2,
+    Brain,
+    BookOpen,
+    Trophy,
+    ChevronDown,
+    ChevronUp,
     Calendar,
     LineChart as LineChartIcon,
     BarChart as BarChartIcon,
@@ -51,6 +51,7 @@ const HomePageBody = () => {
         details: true,
         history: true
     })
+    const [facilitator, setFacilitator] = useState(null)
 
     const { user, fetchUser } = useGlobalContext();
 
@@ -72,7 +73,7 @@ const HomePageBody = () => {
             [section]: !prev[section]
         }));
     };
-    
+
     async function fetchData() {
         setLoading(true);
         let tryEmail = 'mavic.mini0007@gmail.com'; // Replace with the email you want to test with
@@ -81,8 +82,8 @@ const HomePageBody = () => {
                 appwrite.DATABASE.ID,
                 appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
                 [
-                    appwrite.Query.equal('email', user.email),
-                    // appwrite.Query.equal('email', tryEmail),
+                    // appwrite.Query.equal('email', user.email),
+                    appwrite.Query.equal('email', tryEmail),
                     appwrite.Query.orderDesc('$createdAt'),
                 ]
             );
@@ -97,6 +98,7 @@ const HomePageBody = () => {
                 // toast.error("No reports found");
             }
             setHasFetched(true);
+            
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.error("Error fetching data");
@@ -120,7 +122,7 @@ const HomePageBody = () => {
     // Prepare data for trend chart
     const prepareProgressTrendData = () => {
         if (!allReports || allReports.length === 0) return [];
-        
+
         return allReports
             .slice() // Create copy to avoid mutating original
             .sort((a, b) => new Date(a.reportDate) - new Date(b.reportDate))
@@ -136,7 +138,7 @@ const HomePageBody = () => {
     // Prepare data for category distribution chart
     const prepareCategoryDistribution = () => {
         if (!latestReport) return [];
-        
+
         return [
             { name: 'Skill Badges', value: latestReport.noOfSkillBadgesCompleted || 0, color: '#8b5cf6' },
             { name: 'Arcade Games', value: latestReport.noOfArcadeGamesCompleted || 0, color: '#f97316' },
@@ -144,6 +146,30 @@ const HomePageBody = () => {
             { name: 'Lab-Free Courses', value: latestReport.noOfLabFreeCoursesCompleted || 0, color: '#06b6d4' },
         ];
     };
+
+    async function fetchFacilitator() {
+        let uploadedById = latestReport?.uploadedBy || null;
+
+        if (!uploadedById) {
+            return;
+        }
+
+        try {
+            let facilitatorData = await appwrite.database.getDocument(
+                appwrite.DATABASE.ID,
+                appwrite.DATABASE.COLLECTIONS.FACILITATORS,
+                uploadedById
+            )
+
+            console.log("Facilitator Data:", facilitatorData);
+            setFacilitator(facilitatorData);
+
+        } catch (error) {
+            console.error("Error fetching facilitator data:", error);
+
+        }
+    }
+
 
     if (!user) {
         return <WelcomeScreen />;
@@ -191,7 +217,7 @@ const HomePageBody = () => {
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold dark:text-white">Your Progress Dashboard</h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Welcome back, {user.name || latestReport.name || 'Participant'} ! <br/>Here's your Google Cloud Arcade progress under the Facilitator Program.
+                    Welcome back, {user.name || latestReport.name || 'Participant'} ! <br />Here's your Google Cloud Arcade progress under the Facilitator Program.
                 </p>
             </div>
 
@@ -269,7 +295,7 @@ const HomePageBody = () => {
 
             {/* Progress Trends Section */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
-                <div 
+                <div
                     className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center cursor-pointer"
                     onClick={() => toggleSection('progressTrends')}
                 >
@@ -296,43 +322,43 @@ const HomePageBody = () => {
                                             <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
                                             <XAxis dataKey="date" stroke="#6B7280" fontSize={12} tickMargin={10} />
                                             <YAxis stroke="#6B7280" fontSize={12} />
-                                            <Tooltip 
-                                                contentStyle={{ 
-                                                    backgroundColor: '#1F2937', 
+                                            <Tooltip
+                                                contentStyle={{
+                                                    backgroundColor: '#1F2937',
                                                     border: 'none',
                                                     borderRadius: '4px',
                                                     color: '#F9FAFB'
-                                                }} 
+                                                }}
                                             />
                                             <Legend />
-                                            <Line 
-                                                type="monotone" 
-                                                dataKey="skillBadges" 
-                                                name="Skill Badges" 
-                                                stroke="#8b5cf6" 
-                                                strokeWidth={2} 
+                                            <Line
+                                                type="monotone"
+                                                dataKey="skillBadges"
+                                                name="Skill Badges"
+                                                stroke="#8b5cf6"
+                                                strokeWidth={2}
                                                 activeDot={{ r: 6 }}
                                             />
-                                            <Line 
-                                                type="monotone" 
-                                                dataKey="arcadeGames" 
-                                                name="Arcade Games" 
-                                                stroke="#f97316" 
-                                                strokeWidth={2} 
+                                            <Line
+                                                type="monotone"
+                                                dataKey="arcadeGames"
+                                                name="Arcade Games"
+                                                stroke="#f97316"
+                                                strokeWidth={2}
                                             />
-                                            <Line 
-                                                type="monotone" 
-                                                dataKey="triviaGames" 
-                                                name="Trivia Games" 
-                                                stroke="#ec4899" 
-                                                strokeWidth={2} 
+                                            <Line
+                                                type="monotone"
+                                                dataKey="triviaGames"
+                                                name="Trivia Games"
+                                                stroke="#ec4899"
+                                                strokeWidth={2}
                                             />
-                                            <Line 
-                                                type="monotone" 
-                                                dataKey="labFreeCourses" 
-                                                name="Lab-Free Courses" 
-                                                stroke="#06b6d4" 
-                                                strokeWidth={2} 
+                                            <Line
+                                                type="monotone"
+                                                dataKey="labFreeCourses"
+                                                name="Lab-Free Courses"
+                                                stroke="#06b6d4"
+                                                strokeWidth={2}
                                             />
                                         </LineChart>
                                     </ResponsiveContainer>
@@ -377,7 +403,7 @@ const HomePageBody = () => {
 
             {/* Details Section */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
-                <div 
+                <div
                     className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center cursor-pointer"
                     onClick={() => toggleSection('details')}
                 >
@@ -493,7 +519,7 @@ const HomePageBody = () => {
 
             {/* Report History - Fixed div structure and table */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                <div 
+                <div
                     className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center cursor-pointer"
                     onClick={() => toggleSection('history')}
                 >

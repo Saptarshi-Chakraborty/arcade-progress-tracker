@@ -126,15 +126,6 @@ const Navbar = () => {
           {/* Theme toggle always visible */}
           <ThemeToggle />
 
-          {/* My Account button - visible to logged in users on larger screens */}
-          {user && pathname !== '/my-account' && (
-            <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600 hidden sm:flex">
-              <Link href="/my-account">
-                <User size={16} className="mr-1" /> My Account
-              </Link>
-            </Button>
-          )}
-
           {/* Login button - shown when no user is logged in on larger screens */}
           {user === null && pathname !== "/login" && (
             <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600 hidden sm:flex">
@@ -220,12 +211,6 @@ const Navbar = () => {
             )}
 
             {/* Common mobile menu items */}
-            {user && pathname !== '/my-account' && (
-              <Link href="/my-account" onClick={closeMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700">
-                <User size={18} /> My Account
-              </Link>
-            )}
-
             {user === null && pathname !== "/login" && (
               <Link href="/login" onClick={closeMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700">
                 Login
