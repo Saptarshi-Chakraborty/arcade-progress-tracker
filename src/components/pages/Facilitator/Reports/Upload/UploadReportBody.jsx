@@ -440,48 +440,61 @@ const UploadReportBody = () => {
                 id="reportDate"
                 value={selectedDate}
                 onChange={handleDateChange}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                className={`w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 ${
+                  isUploading ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
                 required
+                disabled={isUploading}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
                 <FileText className="h-4 w-4" />
-                CSV File <span className="text-red-500">*</span>
+                Report File (.csv) <span className="text-red-500">*</span>
               </label>
 
               <CSVReader
                 onUploadAccepted={(results) => {
-                  setUploadedData(results.data);
-                  setZoneHover(false);
-                  toast.success('CSV file processed successfully');
+                  if (!isUploading) {
+                    setUploadedData(results.data);
+                    setZoneHover(false);
+                    toast.success('CSV file processed successfully');
+                  }
                 }}
                 onDragOver={(event) => {
-                  event.preventDefault();
-                  setZoneHover(true);
+                  if (!isUploading) {
+                    event.preventDefault();
+                    setZoneHover(true);
+                  }
                 }}
                 onDragLeave={(event) => {
-                  event.preventDefault();
-                  setZoneHover(false);
+                  if (!isUploading) {
+                    event.preventDefault();
+                    setZoneHover(false);
+                  }
                 }}
                 config={{
                   header: true,
                   skipEmptyLines: true
                 }}
+                disabled={isUploading}
               >
                 {({
                   getRootProps,
                   acceptedFile,
                   ProgressBar,
-                  getRemoveFileProps,
+                  getRemoveFileProps
                 }) => (
                   <div
-                    {...getRootProps()}
-                    className={`flex flex-col items-center justify-center h-32 border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${zoneHover
-                      ? 'border-gray-600 dark:border-gray-400 bg-gray-50 dark:bg-gray-700/50'
-                      : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-                      }`}
+                    {...(!isUploading ? getRootProps() : {})}
+                    className={`flex flex-col items-center justify-center h-32 border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${
+                      isUploading 
+                        ? 'border-gray-300 dark:border-gray-600 opacity-60 cursor-not-allowed' 
+                        : zoneHover
+                          ? 'border-gray-600 dark:border-gray-400 bg-gray-50 dark:bg-gray-700/50'
+                          : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+                    }`}
                   >
                     {acceptedFile ? (
                       <div className="relative flex items-center bg-gray-100 dark:bg-gray-700 p-4 rounded-lg w-full">
@@ -495,8 +508,11 @@ const UploadReportBody = () => {
                         </div>
                         <div className="ml-4 flex-shrink-0">
                           <button
-                            {...getRemoveFileProps()}
-                            className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+                            {...(!isUploading ? getRemoveFileProps() : {})}
+                            disabled={isUploading}
+                            className={`p-1 rounded-full ${
+                              isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+                            } transition-colors duration-200`}
                           >
                             <X className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                           </button>
@@ -507,9 +523,9 @@ const UploadReportBody = () => {
                       </div>
                     ) : (
                       <div className="text-center">
-                        <Upload className="mx-auto h-8 w-8 text-gray-400" />
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                          Drop CSV file here or click to upload
+                        <Upload className={`mx-auto h-8 w-8 ${isUploading ? 'text-gray-300 dark:text-gray-600' : 'text-gray-400'}`} />
+                        <p className={`mt-2 text-sm ${isUploading ? 'text-gray-400 dark:text-gray-500' : 'text-gray-600 dark:text-gray-400'}`}>
+                          {isUploading ? 'Upload in progress...' : 'Drop CSV file here or click to upload'}
                         </p>
                         <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
                           Only .csv files are accepted

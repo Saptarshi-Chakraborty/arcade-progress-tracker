@@ -13,11 +13,11 @@ const Footer = () => {
             </a>
           </p>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            <a href="mailto:hello@saptarshi.xyz" className="hover:text-blue-500 transition-colors">Email Us</a>
+            <a href="mailto:hello@saptarshi.xyz?subject=Arcade+Facilitator+Progress+Tracker" className="hover:underline underline-offset-2 text-yellow-600 dark:text-yellow-400 transition-colors">Email Us</a>
             <span className="mx-2">|</span>
             <span>© 2025</span>
             <span className="mx-2">|</span>
-            <a href="https://github.com/Saptarshi-Chakraborty/arcade-progress-tracker" className="hover:text-blue-500 transition-colors" target="_blank" rel="noopener noreferrer">Source Code</a>
+            <a href="https://github.com/Saptarshi-Chakraborty/arcade-progress-tracker" className="hover:underline underline-offset-2 text-green-600 dark:text-green-400 transition-colors" target="_blank" rel="noopener noreferrer">Source Code</a>
           </div>
         </div>
       </div>
