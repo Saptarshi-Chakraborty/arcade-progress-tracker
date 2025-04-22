@@ -82,8 +82,8 @@ const HomePageBody = () => {
                 appwrite.DATABASE.ID,
                 appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
                 [
-                    // appwrite.Query.equal('email', user.email),
-                    appwrite.Query.equal('email', tryEmail),
+                    appwrite.Query.equal('email', user.email),
+                    // appwrite.Query.equal('email', tryEmail),
                     appwrite.Query.orderDesc('$createdAt'),
                 ]
             );
@@ -151,6 +151,7 @@ const HomePageBody = () => {
         let uploadedById = latestReport?.uploadedBy || null;
 
         if (!uploadedById) {
+            setFacilitator(null);
             return;
         }
 
@@ -166,10 +167,18 @@ const HomePageBody = () => {
 
         } catch (error) {
             console.error("Error fetching facilitator data:", error);
-
+            setFacilitator(null);
         }
     }
 
+    // Fetch facilitator when latestReport changes
+    useEffect(() => {
+        if (latestReport && latestReport.uploadedBy) {
+            fetchFacilitator();
+        } else {
+            setFacilitator(null);
+        }
+    }, [latestReport]);
 
     if (!user) {
         return <WelcomeScreen />;
@@ -586,6 +595,14 @@ const HomePageBody = () => {
                     background: rgba(0, 0, 0, 0.3);
                 }
             `}</style>
+            {/* Facilitator Name at the end */}
+            <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+                {facilitator && facilitator.name ? (
+                    <>Uploaded By Facilitator: <span className="font-semibold text-blue-700 dark:text-blue-300">{facilitator.name}</span></>
+                ) : (
+                    <>DataUploaded By Facilitator: <span className="italic">Unknown</span></>
+                )}
+            </div>
         </div>
     );
 }
