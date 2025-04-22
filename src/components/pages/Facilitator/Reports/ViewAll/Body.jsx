@@ -4,6 +4,7 @@ import appwrite from '@/lib/appwrite';
 import { AlertCircle, Users, Award, Gamepad2, Brain, BookOpen, FileText, Search, RefreshCcw, Upload, Eye, Edit2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import FacilitatorMilestones from './FacilitatorMilestones';
 
 const ViewAllReportsBody = () => {
     const [reports, setReports] = useState([]);
@@ -273,6 +274,13 @@ const ViewAllReportsBody = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Facilitator Milestones */}
+            <FacilitatorMilestones
+                arcadeGamesCompleted={stats.arcadeGamesCompleted}
+                triviaGamesCompleted={stats.triviaGamesCompleted}
+                skillBadgesCompleted={stats.skillBadgesCompleted}
+            />
 
             {/* Reports Table */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
