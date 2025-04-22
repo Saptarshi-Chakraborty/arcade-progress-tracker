@@ -26,7 +26,7 @@ const Navbar = () => {
 
   const getAppName = () => {
     if (isAdminSection && isAdminLoggedIn) return "Admin Pannel";
-    if (isFacilitatorLoggedIn) return "Facilitator Dashboard";
+    if (isFacilitatorLoggedIn) return "Facilitator Pannel";
     return "Arcade Progress Tracker";
   };
 
