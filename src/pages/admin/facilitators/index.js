@@ -19,6 +19,9 @@ const AllFacilitators = () => {
         <>
             <Head>
                 <title>All Facilitators | Admin | Arcade Progress Tracker</title>
+
+                <meta name="robots" content="noindex" />
+                <meta name="googlebot" content="noindex" />
             </Head>
 
             <Navbar />

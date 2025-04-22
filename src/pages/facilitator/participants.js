@@ -12,6 +12,9 @@ export default function ParticipantsPage() {
             <Head>
                 <title>Participants | Arcade Progress Tracker</title>
                 <meta name="description" content="View all participants and their progress details" />
+               
+                <meta name="robots" content="noindex" />
+                <meta name="googlebot" content="noindex" />
             </Head>
 
             <Navbar />

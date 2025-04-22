@@ -12,6 +12,9 @@ export default function ParticipantLookup() {
             <Head>
                 <title>Upload Progress Reports | Arcade Progress Tracker</title>
                 <meta name="description" content="View all your progress reports in this page" />
+                
+                <meta name="robots" content="noindex" />
+                <meta name="googlebot" content="noindex" />
             </Head>
 
             <Navbar />

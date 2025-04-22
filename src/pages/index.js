@@ -16,7 +16,7 @@ export default function ParticipantLookup() {
     return (
         <>
             <Head>
-                <title>Check Progress | Arcade Progress Tracker</title>
+                <title>Arcade Progress Tracker - Arcade Facilitator</title>
                 <meta name="description" content="Check your Google Cloud Arcade program progress." />
             </Head>
 
