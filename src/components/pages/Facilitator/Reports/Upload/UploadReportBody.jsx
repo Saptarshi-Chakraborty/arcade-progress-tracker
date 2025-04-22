@@ -440,9 +440,8 @@ const UploadReportBody = () => {
                 id="reportDate"
                 value={selectedDate}
                 onChange={handleDateChange}
-                className={`w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 ${
-                  isUploading ? 'opacity-60 cursor-not-allowed' : ''
-                }`}
+                className={`w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 ${isUploading ? 'opacity-60 cursor-not-allowed' : ''
+                  }`}
                 required
                 disabled={isUploading}
               />
@@ -488,13 +487,12 @@ const UploadReportBody = () => {
                 }) => (
                   <div
                     {...(!isUploading ? getRootProps() : {})}
-                    className={`flex flex-col items-center justify-center h-32 border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${
-                      isUploading 
-                        ? 'border-gray-300 dark:border-gray-600 opacity-60 cursor-not-allowed' 
+                    className={`flex flex-col items-center justify-center h-32 border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${isUploading
+                        ? 'border-gray-300 dark:border-gray-600 opacity-60 cursor-not-allowed'
                         : zoneHover
                           ? 'border-gray-600 dark:border-gray-400 bg-gray-50 dark:bg-gray-700/50'
                           : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-                    }`}
+                      }`}
                   >
                     {acceptedFile ? (
                       <div className="relative flex items-center bg-gray-100 dark:bg-gray-700 p-4 rounded-lg w-full">
@@ -510,9 +508,8 @@ const UploadReportBody = () => {
                           <button
                             {...(!isUploading ? getRemoveFileProps() : {})}
                             disabled={isUploading}
-                            className={`p-1 rounded-full ${
-                              isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-600'
-                            } transition-colors duration-200`}
+                            className={`p-1 rounded-full ${isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+                              } transition-colors duration-200`}
                           >
                             <X className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                           </button>
@@ -620,7 +617,7 @@ const UploadReportBody = () => {
           </div>
         )}
 
-        
+
       </div>
     </div>
   );
