@@ -4,6 +4,7 @@ import { Calendar, Upload, FileText, X, AlertCircle, CheckCircle, Loader2, Chevr
 import toast from 'react-hot-toast';
 import DataTable from '@/components/pages/Facilitator/Reports/Upload/DataTable';
 import Statistics from '@/components/pages/Facilitator/Reports/Upload/Statistics';
+import { mockFacilitator } from '@/data/mockParticipantsData';
 
 // Add delay helper function
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -26,10 +27,7 @@ const ExampleUploadReportBody = () => {
 
   // Fake facilitator details
   const facilitator = {
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    code: "FAC12345",
-    $id: "example-facilitator-id"
+    ...mockFacilitator
   };
 
   // Add useEffect for beforeunload event to prevent accidental navigation during upload

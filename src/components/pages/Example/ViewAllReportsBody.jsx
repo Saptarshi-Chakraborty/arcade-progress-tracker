@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 // Importing the example components (assuming they exist or would be created similarly)
 import ChartVisualizations from '../Facilitator/Reports/ViewAll/ChartVisualizations';
 import FacilitatorMilestones from '../Facilitator/Reports/ViewAll/FacilitatorMilestones';
+import { mockFacilitator } from '@/data/mockParticipantsData';
 
 const ExampleViewAllReportsBody = () => {
   const [reports, setReports] = useState([]);
@@ -29,11 +30,6 @@ const ExampleViewAllReportsBody = () => {
   const fetchSampleData = async () => {
       // Simulate API delay
       setTimeout(() => {
-          const mockFacilitator = {
-              name: "Jane Facilitator",
-              email: "jane.facilitator@example.com",
-              code: "FACIL123"
-          };
           
           const mockReports = [
               {
@@ -331,7 +327,7 @@ const ExampleViewAllReportsBody = () => {
                           <RefreshCcw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                       </button>
 
-                      <Link href="/example/reports/upload"
+                      <Link href="/example/upload-report"
                           className="p-2 sm:px-3 sm:py-2 rounded-md bg-green-600 hover:bg-green-700 text-white transition-colors duration-200 flex items-center justify-center gap-1 text-sm"
                           aria-label="Upload new report"
                       >
