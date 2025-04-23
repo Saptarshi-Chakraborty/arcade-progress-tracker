@@ -1,6 +1,6 @@
 "use client"; // Ensure this is a client component
 
-import React, { useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -46,17 +46,24 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   };
 
+  // Fetch user data when component mounts
+  useLayoutEffect(() => {
+    if (!user) {
+      fetchUser();
+    }
+  }, [user, fetchUser]);
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-gray-700">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-5 md:px-6 lg:px-8">
         {/* Left Side: App Logo/Name */}
         <div className="flex items-center flex-shrink-0">
           <Link href="/" className="mr-1 md:mr-2 flex items-center space-x-1 md:space-x-2">
-            <Image 
-              src="/icons/icon-512.png" 
-              alt="App Logo" 
-              width={32} 
-              height={32} 
+            <Image
+              src="/icons/icon-512.png"
+              alt="App Logo"
+              width={32}
+              height={32}
               className="rounded-sm"
             />
             <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate max-w-[120px] sm:max-w-[150px] md:max-w-[180px] lg:max-w-none">
@@ -71,34 +78,20 @@ const Navbar = () => {
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <LayoutDashboard size={16} className="shrink-0" /> 
+                <LayoutDashboard size={16} className="shrink-0" />
                 <span className="hidden md:inline">Dashboard</span>
                 <span className="md:hidden">Dash</span>
               </Link>
-              <Link href="/facilitator/reports/upload" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/admin/upload'
-                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
-                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-                }`}>
-                <Upload size={16} className="shrink-0" /> 
-                <span className="hidden md:inline">Upload Report</span>
-                <span className="md:hidden">Upload</span>
-              </Link>
-              <Link href="/admin/participants" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/admin/participants'
-                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
-                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
-                }`}>
-                <Users size={16} className="shrink-0" /> 
-                <span className="hidden md:inline">Participants</span>
-                <span className="md:hidden">Parts</span>
-              </Link>
+              
               <Link href="/admin/facilitators" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname.startsWith('/admin/facilitators')
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <User size={16} className="shrink-0" /> 
+                <User size={16} className="shrink-0" />
                 <span className="hidden md:inline">Facilitators</span>
                 <span className="md:hidden">Facil</span>
               </Link>
+              
             </nav>
           )}
 
@@ -109,7 +102,7 @@ const Navbar = () => {
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <Upload size={16} className="shrink-0" /> 
+                <Upload size={16} className="shrink-0" />
                 <span className="hidden md:inline">Upload Report</span>
                 <span className="md:hidden">Upload</span>
               </Link>
@@ -118,7 +111,7 @@ const Navbar = () => {
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <FileSpreadsheet size={16} className="shrink-0" /> 
+                <FileSpreadsheet size={16} className="shrink-0" />
                 <span className="hidden md:inline">Reports</span>
                 <span className="md:hidden">Reps</span>
               </Link>
@@ -127,7 +120,7 @@ const Navbar = () => {
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <Users size={16} className="shrink-0" /> 
+                <Users size={16} className="shrink-0" />
                 <span className="hidden md:inline">Participants</span>
                 <span className="md:hidden">Parts</span>
               </Link>
@@ -160,13 +153,13 @@ const Navbar = () => {
 
           {/* Logout button - shown when user is logged in on larger screens */}
           {user && (
-            <Button 
-              variant="destructive" 
-              className="hidden sm:flex text-xs md:text-sm" 
+            <Button
+              variant="destructive"
+              className="hidden sm:flex text-xs md:text-sm"
               onClick={handleLogout}
               size="sm"
             >
-              <LogOut size={16} className="mr-0 md:mr-1 shrink-0" /> 
+              <LogOut size={16} className="mr-0 md:mr-1 shrink-0" />
               <span className="hidden md:inline">Logout</span>
             </Button>
           )}

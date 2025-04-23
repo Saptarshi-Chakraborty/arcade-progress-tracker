@@ -31,6 +31,25 @@ const UploadReportBody = () => {
   const router = useRouter();
   const { user, isFacilitatorLoggedIn, fetchUser } = useGlobalContext();
 
+  // Add useEffect for beforeunload event to prevent accidental navigation during upload
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isUploading) {
+        // Standard way to show the dialog in most browsers
+        e.preventDefault();
+        // Custom message (note: most modern browsers show their own generic message)
+        e.returnValue = 'Report upload in progress. Are you sure you want to leave? Your upload will be lost.';
+        return e.returnValue;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isUploading]);
+
   useEffect(() => {
     if (!user) {
       fetchUser();
