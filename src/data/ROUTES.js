@@ -31,4 +31,12 @@ export default [
         name: "Upload Report",
         path: "/facilitator/reports/upload"
     },
+    {
+        name:"View Participants (Facilitator)",
+        path: "/facilitator/participants"
+    },
+    {
+        name:"View Participants (Alternate)",
+        path: "/facilitator/alternate-view"
+    },
 ]

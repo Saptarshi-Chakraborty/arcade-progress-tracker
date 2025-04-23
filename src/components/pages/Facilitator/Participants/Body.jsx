@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalContext } from '@/contexts/GlobalProvider';
 import appwrite from '@/lib/appwrite';
-import { 
-  AlertCircle, 
-  Search, 
-  Calendar, 
-  RefreshCcw, 
-  ChevronDown, 
+import {
+  AlertCircle,
+  Search,
+  Calendar,
+  RefreshCcw,
+  ChevronDown,
   ChevronUp,
   FileText,
   ExternalLink,
@@ -17,6 +17,7 @@ import {
   Trophy
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 const ParticipantsBody = () => {
   const [participants, setParticipants] = useState([]);
@@ -92,7 +93,7 @@ const ParticipantsBody = () => {
         [
           appwrite.Query.equal('facilitatorCode', facilitator.code.toUpperCase()),
           appwrite.Query.orderDesc('reportDate'),
-          appwrite.Query.limit(100) 
+          appwrite.Query.limit(100)
         ]
       );
 
@@ -102,7 +103,7 @@ const ParticipantsBody = () => {
           date: doc.reportDate,
           formattedDate: formatDate(doc.reportDate)
         })));
-        
+
         // Select the latest date by default
         setSelectedDate(response.documents[0].$id);
       } else {
@@ -145,11 +146,11 @@ const ParticipantsBody = () => {
     }
 
     const term = searchTerm.toLowerCase();
-    const filtered = participants.filter(participant => 
-      participant.name?.toLowerCase().includes(term) || 
+    const filtered = participants.filter(participant =>
+      participant.name?.toLowerCase().includes(term) ||
       participant.email?.toLowerCase().includes(term)
     );
-    
+
     setFilteredParticipants(filtered);
   };
 
@@ -211,6 +212,13 @@ const ParticipantsBody = () => {
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
           View all participants and their progress details.
         </p>
+        <Link
+          href="/facilitator/alternate-view"
+          className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mt-1"
+        >
+          <ExternalLink className="h-3 w-3" />
+          Alternate View
+        </Link>
       </div>
 
       {facilitator && (
@@ -306,7 +314,7 @@ const ParticipantsBody = () => {
               {filteredParticipants.map((participant) => (
                 <div key={participant.$id} className="transition-colors duration-150">
                   {/* Participant Summary Row (Always Visible) */}
-                  <div 
+                  <div
                     className="p-4 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer"
                     onClick={() => toggleParticipantDetails(participant.$id)}
                   >
@@ -334,7 +342,7 @@ const ParticipantsBody = () => {
                           <span>{participant.noOfLabFreeCoursesCompleted || 0}</span>
                         </div>
                       </div>
-                      
+
                       {/* Expand/Collapse Icon */}
                       <div>
                         {expandedParticipant === participant.$id ? (
@@ -345,7 +353,7 @@ const ParticipantsBody = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Expanded Details */}
                   {expandedParticipant === participant.$id && (
                     <div className="p-4 bg-gray-50 dark:bg-gray-700/30 border-t border-gray-200 dark:border-gray-700">
@@ -359,9 +367,9 @@ const ParticipantsBody = () => {
                               Google Cloud Skills Boost Profile
                             </h5>
                             {participant.skillBoostUrl ? (
-                              <a 
-                                href={participant.skillBoostUrl} 
-                                target="_blank" 
+                              <a
+                                href={participant.skillBoostUrl}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-600 dark:text-blue-400 hover:underline text-sm flex items-center"
                               >
@@ -376,15 +384,14 @@ const ParticipantsBody = () => {
                           <div className="grid grid-cols-2 gap-4">
                             <div>
                               <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Access Code Status</h5>
-                              <span className={`text-sm px-2 py-1 rounded-full ${
-                                participant.accessCodeStatus === 'Yes' 
-                                  ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' 
+                              <span className={`text-sm px-2 py-1 rounded-full ${participant.accessCodeStatus === 'Yes'
+                                  ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                                   : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                              }`}>
+                                }`}>
                                 {participant.accessCodeStatus || 'Unknown'}
                               </span>
                             </div>
-                            
+
                             <div>
                               <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 <Trophy className="h-4 w-4 inline mr-1 text-amber-500" />
