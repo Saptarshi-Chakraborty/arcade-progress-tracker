@@ -140,6 +140,17 @@ const Navbar = () => {
           {/* Theme toggle always visible */}
           <ThemeToggle />
 
+          {/* Admin Panel Button - shown when user is admin but not in admin section */}
+          {isAdminLoggedIn && !isAdminSection && (
+            <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600 hidden sm:flex">
+              <Link href="/admin/dashboard" className="flex items-center gap-1">
+                <LayoutDashboard size={16} className="shrink-0" />
+                <span className="hidden md:inline">Admin Panel</span>
+                <span className="md:hidden">Admin</span>
+              </Link>
+            </Button>
+          )}
+
           {/* Login button - shown when no user is logged in on larger screens */}
           {user === null && pathname !== "/login" && (
             <Button asChild variant="outline" className="border-gray-300 dark:border-gray-600 hidden sm:flex">
@@ -176,6 +187,13 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b dark:border-gray-700">
           <div className="px-2 pt-2 pb-3 space-y-1">
+            {/* Admin Panel Link for mobile when user is admin but not in admin section */}
+            {isAdminLoggedIn && !isAdminSection && (
+              <Link href="/admin/dashboard" onClick={closeMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700">
+                <LayoutDashboard size={18} /> Admin Panel
+              </Link>
+            )}
+
             {/* Admin Navigation Mobile */}
             {isAdminSection && isAdminLoggedIn && (
               <>
