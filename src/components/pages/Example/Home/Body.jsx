@@ -1,10 +1,6 @@
 "use client";
 
-import { useGlobalContext } from '@/contexts/GlobalProvider';
-import appwrite from '@/lib/appwrite';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from 'react';
 import {
     Award,
     Gamepad2,
@@ -22,9 +18,7 @@ import ProgressTrendsSection from '@/components/pages/Index/ProgressTrendsSectio
 import CompletionDetailsSection from '@/components/pages/Index/CompletionDetailsSection';
 import ReportHistorySection from '@/components/pages/Index/ReportHistorySection';
 
-const HomePageBody = () => {
-    const router = useRouter();
-
+const ExampleHomePageBody = () => {
     const [latestReport, setLatestReport] = useState(null)
     const [allReports, setAllReports] = useState([])
     const [loading, setLoading] = useState(true)
@@ -36,19 +30,17 @@ const HomePageBody = () => {
     })
     const [facilitator, setFacilitator] = useState(null)
 
-    const { user, fetchUser } = useGlobalContext();
+    // Fake user for the example page
+    const user = {
+        name: "John Sample",
+        email: "john.sample@example.com"
+    };
 
     useEffect(() => {
-        if (!user) {
-            fetchUser();
+        if (!hasFetched) {
+            fetchSampleData();
         }
-    }, [user, fetchUser, router]);
-
-    useEffect(() => {
-        if (user && !hasFetched) {
-            fetchData();
-        }
-    }, [user, hasFetched]);
+    }, [hasFetched]);
 
     const toggleSection = (section) => {
         setExpandedSections(prev => ({
@@ -57,35 +49,104 @@ const HomePageBody = () => {
         }));
     };
 
-    async function fetchData() {
+    async function fetchSampleData() {
         setLoading(true);
-        let tryEmail = 'mavic.mini0007@gmail.com'; // Replace with the email you want to test with
-        try {
-            const data = await appwrite.database.listDocuments(
-                appwrite.DATABASE.ID,
-                appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
-                [
-                    // appwrite.Query.equal('email', user.email),
-                    appwrite.Query.equal('email', tryEmail),
-                    appwrite.Query.orderDesc('$createdAt'),
-                ]
-            );
+        
+        // Simulate API delay
+        setTimeout(() => {
+            // Sample reports data
+            const reports = [
+                {
+                    $id: '1',
+                    name: "John Sample",
+                    email: "john.sample@example.com",
+                    reportDate: '2023-10-22T00:00:00.000Z',
+                    noOfSkillBadgesCompleted: 15,
+                    noOfArcadeGamesCompleted: 7,
+                    noOfTriviaGamesCompleted: 12,
+                    noOfLabFreeCoursesCompleted: 5,
+                    milestoneEarned: 'Milestone 2',
+                    accessCodeStatus: 'Yes',
+                    skillBoostUrl: 'https://www.cloudskillsboost.google/profile/example',
+                    uploadedBy: 'facilitator123',
+                    skillBadgesCompleted: [
+                        "Google Cloud Essentials", 
+                        "Baseline: Infrastructure", 
+                        "Kubernetes", 
+                        "Cloud Architecture", 
+                        "Data Science", 
+                        "Machine Learning", 
+                        "DevOps Essentials"
+                    ],
+                    arcadeGamesCompleted: [
+                        "Cloud Run", 
+                        "BigQuery", 
+                        "Cloud Storage"
+                    ],
+                    triviaGamesCompleted: [
+                        "Cloud Computing Basics", 
+                        "Machine Learning Concepts", 
+                        "Big Data Essentials", 
+                        "Serverless Architecture"
+                    ],
+                    labFreeCoursesCompleted: [
+                        "Introduction to Cloud Computing", 
+                        "Machine Learning Crash Course"
+                    ]
+                },
+                {
+                    $id: '2',
+                    name: "John Sample",
+                    email: "john.sample@example.com",
+                    reportDate: '2023-09-15T00:00:00.000Z',
+                    noOfSkillBadgesCompleted: 12,
+                    noOfArcadeGamesCompleted: 5,
+                    noOfTriviaGamesCompleted: 10,
+                    noOfLabFreeCoursesCompleted: 3,
+                    milestoneEarned: 'Level 2 Milestone',
+                    accessCodeStatus: 'Active',
+                    uploadedBy: 'facilitator123',
+                },
+                {
+                    $id: '3',
+                    name: "John Sample",
+                    email: "john.sample@example.com",
+                    reportDate: '2023-08-10T00:00:00.000Z',
+                    noOfSkillBadgesCompleted: 8,
+                    noOfArcadeGamesCompleted: 3,
+                    noOfTriviaGamesCompleted: 7,
+                    noOfLabFreeCoursesCompleted: 2,
+                    milestoneEarned: 'Level 1 Milestone',
+                    accessCodeStatus: 'Active',
+                    uploadedBy: 'facilitator123',
+                },
+                {
+                    $id: '4',
+                    name: "John Sample",
+                    email: "john.sample@example.com",
+                    reportDate: '2023-07-05T00:00:00.000Z',
+                    noOfSkillBadgesCompleted: 4,
+                    noOfArcadeGamesCompleted: 1,
+                    noOfTriviaGamesCompleted: 3,
+                    noOfLabFreeCoursesCompleted: 0,
+                    milestoneEarned: 'None',
+                    accessCodeStatus: 'Active',
+                    uploadedBy: 'facilitator123',
+                }
+            ];
 
-            console.log(data);
-            if (data.total > 0) {
-                setLatestReport(data.documents[0]);
-                setAllReports(data.documents);
-            } else {
-                setAllReports([]);
-                setLatestReport(null);
-            }
+            setAllReports(reports);
+            setLatestReport(reports[0]);
             setHasFetched(true);
 
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            toast.error("Error fetching data");
-        }
-        setLoading(false);
+            // Simulate facilitator data
+            setFacilitator({
+                name: "Jane Facilitator",
+                email: "jane.facilitator@example.com"
+            });
+            
+            setLoading(false);
+        }, 1000);
     }
 
     const formatDate = (isoString) => {
@@ -100,43 +161,6 @@ const HomePageBody = () => {
             return 'Invalid Date';
         }
     };
-
-    async function fetchFacilitator() {
-        let uploadedById = latestReport?.uploadedBy || null;
-
-        if (!uploadedById) {
-            setFacilitator(null);
-            return;
-        }
-
-        try {
-            let facilitatorData = await appwrite.database.getDocument(
-                appwrite.DATABASE.ID,
-                appwrite.DATABASE.COLLECTIONS.FACILITATORS,
-                uploadedById
-            )
-
-            console.log("Facilitator Data:", facilitatorData);
-            setFacilitator(facilitatorData);
-
-        } catch (error) {
-            console.error("Error fetching facilitator data:", error);
-            setFacilitator(null);
-        }
-    }
-
-    // Fetch facilitator when latestReport changes
-    useEffect(() => {
-        if (latestReport && latestReport.uploadedBy) {
-            fetchFacilitator();
-        } else {
-            setFacilitator(null);
-        }
-    }, [latestReport]);
-
-    if (!user) {
-        return <WelcomeScreen />;
-    }
 
     if (loading) {
         return (
@@ -316,4 +340,4 @@ const HomePageBody = () => {
     );
 };
 
-export default HomePageBody;
+export default ExampleHomePageBody;

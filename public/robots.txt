@@ -3,3 +3,4 @@ User-agent: AdsBot-Google
 Allow: /
 Disallow: /admin/
 Disallow: /facilitator/
+Disallow: /routes
