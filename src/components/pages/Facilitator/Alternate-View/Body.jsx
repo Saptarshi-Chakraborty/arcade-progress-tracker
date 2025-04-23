@@ -221,7 +221,15 @@ const AlternateViewBody = () => {
       
       {/* Participant Selection Panel */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6 p-6">
-        <h3 className="text-lg font-medium mb-4">Select a Participant</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-medium">Select a Participant</h3>
+          {filteredParticipants.length > 0 && (
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+              <Calendar className="h-4 w-4 mr-1" />
+              <span>Report Date: {formatDate(filteredParticipants[0]?.reportDate)}</span>
+            </div>
+          )}
+        </div>
         
         <div className="mb-4">
           <div className="relative w-full max-w-md">
@@ -261,14 +269,9 @@ const AlternateViewBody = () => {
                       {participant.email || 'No Email'}
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    {participant.milestoneEarned && participant.milestoneEarned !== 'None' && (
-                      <Trophy className="h-4 w-4 text-amber-500" />
-                    )}
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {formatDate(participant.reportDate)}
-                    </span>
-                  </div>
+                  {participant.milestoneEarned && participant.milestoneEarned !== 'None' && (
+                    <Trophy className="h-4 w-4 text-amber-500" />
+                  )}
                 </div>
               ))}
             </div>
