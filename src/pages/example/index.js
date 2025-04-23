@@ -8,7 +8,8 @@ const ROUTES = [
     { name: "Home", path: "/example/home" },
     { name: "Upload Report (Facilitator)", path: "/example/upload-report" },
     { name: "View Reports (Facilitator)", path: "/example/view-reports" },
-    { name: "Participants (Facilitator)", path: "/example/participants" },
+    { name: "Participants Details(Facilitator)", path: "/example/participants" },
+    { name: "Participant's Detailed Report (Facilitator)", path: "/example/alternate-view" },
     { name: "Example Page", path: "/example" },
 ];
 
