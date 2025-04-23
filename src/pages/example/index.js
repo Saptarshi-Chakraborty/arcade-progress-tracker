@@ -6,9 +6,9 @@ import { LinkIcon } from "lucide-react";
 
 const ROUTES = [
     { name: "Home", path: "/example/home" },
-    { name: "Upload Report", path: "/example/upload-report" },
-    { name: "Participant Lookup", path: "/example/participant-lookup" },
-    { name: "Routes", path: "/routes" },
+    { name: "Upload Report (Facilitator)", path: "/example/upload-report" },
+    { name: "View Reports (Facilitator)", path: "/example/view-reports" },
+    { name: "Participants (Facilitator)", path: "/example/participants" },
     { name: "Example Page", path: "/example" },
 ];
 
