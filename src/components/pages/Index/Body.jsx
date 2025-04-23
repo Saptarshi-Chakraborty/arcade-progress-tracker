@@ -66,7 +66,6 @@ const HomePageBody = () => {
                 appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
                 [
                     appwrite.Query.equal('email', user.email),
-                    // appwrite.Query.equal('email', tryEmail), // Use the test email here
                     appwrite.Query.orderDesc('$createdAt'),
                 ]
             );
