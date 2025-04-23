@@ -48,10 +48,10 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-gray-700">
-      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="container flex h-16 items-center justify-between px-4 sm:px-5 md:px-6 lg:px-8">
         {/* Left Side: App Logo/Name */}
-        <div className="flex items-center">
-          <Link href="/" className="mr-2 flex items-center space-x-2">
+        <div className="flex items-center flex-shrink-0">
+          <Link href="/" className="mr-1 md:mr-2 flex items-center space-x-1 md:space-x-2">
             <Image 
               src="/icons/icon-512.png" 
               alt="App Logo" 
@@ -59,70 +59,84 @@ const Navbar = () => {
               height={32} 
               className="rounded-sm"
             />
-            <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">
+            <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate max-w-[120px] sm:max-w-[150px] md:max-w-[180px] lg:max-w-none">
               {getAppName()}
             </span>
           </Link>
 
           {/* Desktop Navigation - hidden on mobile */}
           {isAdminSection && isAdminLoggedIn && (
-            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-6 cursor-pointer">
-              <Link href="/admin/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/dashboard'
+            <nav className="hidden md:flex items-center space-x-1 lg:space-x-6 ml-4 md:ml-6 cursor-pointer overflow-x-auto">
+              <Link href="/admin/dashboard" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/admin/dashboard'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <LayoutDashboard size={16} /> Dashboard
+                <LayoutDashboard size={16} className="shrink-0" /> 
+                <span className="hidden md:inline">Dashboard</span>
+                <span className="md:hidden">Dash</span>
               </Link>
-              <Link href="/facilitator/reports/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/upload'
+              <Link href="/facilitator/reports/upload" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/admin/upload'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <Upload size={16} /> Upload Report
+                <Upload size={16} className="shrink-0" /> 
+                <span className="hidden md:inline">Upload Report</span>
+                <span className="md:hidden">Upload</span>
               </Link>
-              <Link href="/admin/participants" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/admin/participants'
+              <Link href="/admin/participants" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/admin/participants'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <Users size={16} /> Participants
+                <Users size={16} className="shrink-0" /> 
+                <span className="hidden md:inline">Participants</span>
+                <span className="md:hidden">Parts</span>
               </Link>
-              <Link href="/admin/facilitators" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname.startsWith('/admin/facilitators')
+              <Link href="/admin/facilitators" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname.startsWith('/admin/facilitators')
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <User size={16} /> Facilitators
+                <User size={16} className="shrink-0" /> 
+                <span className="hidden md:inline">Facilitators</span>
+                <span className="md:hidden">Facil</span>
               </Link>
             </nav>
           )}
 
           {/* Facilitator Navigation - show when user is a facilitator and not in admin section */}
           {isFacilitatorLoggedIn && !isAdminSection && (
-            <nav className="hidden md:flex items-center space-x-2 lg:space-x-4 ml-6 cursor-pointer">
-              <Link href="/facilitator/reports/upload" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/upload'
+            <nav className="hidden md:flex items-center space-x-1 md:space-x-2 lg:space-x-4 ml-4 md:ml-6 cursor-pointer">
+              <Link href="/facilitator/reports/upload" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/upload'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <Upload size={16} /> Upload Report
+                <Upload size={16} className="shrink-0" /> 
+                <span className="hidden md:inline">Upload Report</span>
+                <span className="md:hidden">Upload</span>
               </Link>
 
-              <Link href="/facilitator/reports" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/reports'
+              <Link href="/facilitator/reports" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/reports'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <FileSpreadsheet size={16} /> Reports
+                <FileSpreadsheet size={16} className="shrink-0" /> 
+                <span className="hidden md:inline">Reports</span>
+                <span className="md:hidden">Reps</span>
               </Link>
 
-              <Link href="/facilitator/participants" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${pathname === '/participants'
+              <Link href="/facilitator/participants" className={`px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium flex items-center gap-1 ${pathname === '/participants'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100'
                 : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}>
-                <Users size={16} /> Participants
+                <Users size={16} className="shrink-0" /> 
+                <span className="hidden md:inline">Participants</span>
+                <span className="md:hidden">Parts</span>
               </Link>
             </nav>
           )}
         </div>
 
         {/* Right Side: Mobile Menu Button + Theme Toggle + User Actions */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
           {/* Theme toggle always visible */}
           <ThemeToggle />
 
@@ -135,8 +149,14 @@ const Navbar = () => {
 
           {/* Logout button - shown when user is logged in on larger screens */}
           {user && (
-            <Button variant="destructive" className="hidden sm:flex" onClick={handleLogout}>
-              <LogOut size={16} className="mr-1" /> Logout
+            <Button 
+              variant="destructive" 
+              className="hidden sm:flex text-xs md:text-sm" 
+              onClick={handleLogout}
+              size="sm"
+            >
+              <LogOut size={16} className="mr-0 md:mr-1 shrink-0" /> 
+              <span className="hidden md:inline">Logout</span>
             </Button>
           )}
 

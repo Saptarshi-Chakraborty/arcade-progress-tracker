@@ -71,6 +71,7 @@ const AlternateViewBody = () => {
         appwrite.DATABASE.ID,
         appwrite.DATABASE.COLLECTIONS.DAILY_REPORTS,
         [
+          appwrite.Query.select(['$id', 'reportDate']),
           appwrite.Query.equal('facilitatorCode', facilitatorCode.toUpperCase()),
           appwrite.Query.orderDesc('reportDate'),
           appwrite.Query.limit(1) // Get the most recent report
@@ -90,6 +91,7 @@ const AlternateViewBody = () => {
         appwrite.DATABASE.ID,
         appwrite.DATABASE.COLLECTIONS.INDIVIDUAL_REPORTS,
         [
+          appwrite.Query.select(['$id', 'name', 'email', 'reportDate', 'milestoneEarned']),
           appwrite.Query.equal('dailyReport', latestDailyReport.$id),
           appwrite.Query.limit(500)
         ]
