@@ -1,4 +1,5 @@
-# Arcade Progress Tracker
+
+# ![Arcade Progress Tracker](./public/icons/favicon.ico) Arcade Progress Tracker
 
 [![License: Custom](https://img.shields.io/badge/License-Proprietary-red.svg)](./LICENSE.md)
 
@@ -80,9 +81,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
 
 This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
@@ -92,16 +90,15 @@ This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-appl
 arcade-progress-tracker/
 ├── components/              # Reusable UI components
 │   ├── common/              # Shared components across pages
-│   └── pages/               # Page-specific components
-│       ├── Example/         # Example page components
-│       ├── Facilitator/     # Facilitator page components
-│       └── Index/           # Dashboard components
+│   ├── pages/               # Page-specific components
+│   │   ├── Example/         # Example page components
+│   │   └── Facilitator/     # Facilitator page components
+│   └── UI/                  # UI components (buttons, inputs, etc.)
 ├── contexts/                # React context providers
 ├── data/                    # Static data and mocks
 ├── lib/                     # Utility libraries
 │   └── appwrite.js          # Appwrite client configuration
 ├── pages/                   # Application pages
-│   ├── api/                 # API routes
 │   ├── example/             # Example pages
 │   ├── facilitator/         # Facilitator pages
 │   └── index.js             # Main dashboard page
@@ -111,7 +108,6 @@ arcade-progress-tracker/
 ## Deployment
 
 The application can be deployed on Vercel or any other hosting platform that supports Next.js.
-details.
 
 ## License
 
