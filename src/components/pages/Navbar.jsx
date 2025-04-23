@@ -25,8 +25,8 @@ const Navbar = () => {
   const isAdminSection = pathname.startsWith('/admin');
 
   const getAppName = () => {
-    if (isAdminSection && isAdminLoggedIn) return "Admin Pannel";
-    if (isFacilitatorLoggedIn) return "Facilitator Pannel";
+    if (isAdminSection && isAdminLoggedIn) return "Admin Panel";
+    if (isFacilitatorLoggedIn) return "Facilitator Panel";
     return "Arcade Progress Tracker";
   };
 

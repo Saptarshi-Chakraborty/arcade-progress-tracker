@@ -1,3 +1,5 @@
+"use client";
+
 import Head from "next/head";
 import { Toaster } from "react-hot-toast";
 import ROUTES from "@/data/ROUTES"; // Corrected import

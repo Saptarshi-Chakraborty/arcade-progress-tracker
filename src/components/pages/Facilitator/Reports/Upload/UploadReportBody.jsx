@@ -431,7 +431,7 @@ const UploadReportBody = () => {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold dark:text-white">Upload Progress Report</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-          Upload a CSV file containing your students' progress data.
+          Upload a CSV file containing your participants' progress data.
         </p>
       </div>
 
