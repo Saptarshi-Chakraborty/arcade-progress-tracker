@@ -368,7 +368,7 @@ const ViewAllReportsBody = () => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                                                 <div className="flex items-center justify-center space-x-2">
-                                                    <button
+                                                    {/* <button
                                                         className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30 transition-colors"
                                                         title="View Details"
                                                         onClick={() => {
@@ -376,7 +376,7 @@ const ViewAllReportsBody = () => {
                                                         }}
                                                     >
                                                         <Eye className="h-4 w-4" />
-                                                    </button>
+                                                    </button> */}
 
 
                                                     <button

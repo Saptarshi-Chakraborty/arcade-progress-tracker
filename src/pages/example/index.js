@@ -23,7 +23,7 @@ export default function Routes() {
             <Card className="w-full max-w-2xl mx-auto">
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold text-center">
-                        All Pages of the Website
+                        All the pages of this Website
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
