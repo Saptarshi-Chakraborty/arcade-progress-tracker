@@ -31,7 +31,7 @@ const ExampleViewAllReportsBody = () => {
       // Simulate API delay
       setTimeout(() => {
           
-          const mockReports = [
+        const mockReports = [
               {
                   $id: '1',
                   reportDate: '2025-04-23T00:00:00.000Z',
@@ -158,8 +158,8 @@ const ExampleViewAllReportsBody = () => {
           setReports(mockReports);
           setStats(mockStats);
           setIsLoading(false);
-      }, 1500); // 1.5 second delay to simulate loading
-  };
+        }, 500); // 0.5 second delay to simulate loading
+    };
 
   const formatDate = (isoString) => {
       if (!isoString) return 'N/A';

@@ -66,7 +66,7 @@ const Navbar = () => {
               height={32}
               className="rounded-sm"
             />
-            <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate max-w-[120px] sm:max-w-[150px] md:max-w-[180px] lg:max-w-none">
+            <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100">
               {getAppName()}
             </span>
           </Link>
