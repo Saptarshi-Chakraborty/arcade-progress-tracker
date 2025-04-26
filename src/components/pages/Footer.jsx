@@ -21,6 +21,12 @@ const Footer = () => {
             <a href="https://github.com/Saptarshi-Chakraborty/arcade-progress-tracker" className="hover:underline underline-offset-2 text-green-600 dark:text-green-400 transition-colors" target="_blank" rel="noopener noreferrer">Source Code</a> */}
 
           </div>
+
+          {/* Disclaimer that this is not an official website of arcade or google cloud */}
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
+            This is not an official website of Arcade or Google Cloud.
+          </p>
+          
         </div>
       </div>
     </footer>
