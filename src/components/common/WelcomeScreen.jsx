@@ -18,7 +18,7 @@ const WelcomeScreen = () => {
             </h1>
             <div className="text-center mb-6">
               <p className="text-gray-600 dark:text-gray-300 text-lg mb-3">
-                Track your progress in Google Cloud Arcade games and compare it with the Facilitator's official data.
+                Track your progress in Google Cloud Arcade games and compare it with the Facilitator's  data.
               </p>
               <p className="text-gray-600 dark:text-gray-300">
                 View your completed skill badges, arcade games, trivia games, and lab-free courses all in one place. 
@@ -36,6 +36,10 @@ const WelcomeScreen = () => {
                 </button>
               </Link>
             </div>
+          {/* Disclaimer that this is not an official website of arcade or google cloud */}
+          <p className=" mt-2 text-base text-center ">
+            Disclaimer: This is not an official website of Arcade or Google Cloud.
+          </p>
           </div>
         </div>
       </div>

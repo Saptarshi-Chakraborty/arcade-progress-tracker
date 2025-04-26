@@ -6,11 +6,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-gray-700 dark:text-gray-300 mb-2">
-            Made with <span className="text-blue-500">💙</span> by {" "}
-            <a href='https://linktr.ee/gdgoncampus.fiem' target="_blank" rel="noopener noreferrer" className=" hover:underline underline-offset-2 text-red-600 dark:text-red-400  transition-transform duration-400 ease-in-out">
-
-              GDG On Campus FIEM
-            </a>
+            Made with <span className="text-blue-500">💙</span>
           </p>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
             <a href="mailto:hello@saptarshi.xyz?subject=Arcade+Facilitator+Progress+Tracker" className="hover:underline underline-offset-2 text-yellow-600 dark:text-yellow-400 transition-colors">Email Us</a>
