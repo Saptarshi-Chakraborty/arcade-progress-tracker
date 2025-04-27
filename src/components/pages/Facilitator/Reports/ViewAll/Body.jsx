@@ -368,21 +368,15 @@ const ViewAllReportsBody = () => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                                                 <div className="flex items-center justify-center space-x-2">
-                                                    {/* <button
-                                                        className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30 transition-colors"
-                                                        title="View Details"
-                                                        onClick={() => {
-                                                            toast.success('View details functionality will be added soon');
-                                                        }}
-                                                    >
-                                                        <Eye className="h-4 w-4" />
-                                                    </button> */}
-
-
                                                     <button
-                                                        className="p-1.5 rounded-md text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30 transition-colors"
-                                                        title="Delete Report"
+                                                        className={`p-1.5 rounded-md transition-colors ${
+                                                            user.$id !== report.uploadedBy 
+                                                                ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' 
+                                                                : 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30'
+                                                        }`}
+                                                        title={user.$id !== report.uploadedBy ? "You can only delete reports you uploaded" : "Delete Report"}
                                                         onClick={() => { handleDeleteReport(report.$id) }}
+                                                        disabled={user.$id !== report.uploadedBy}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                     </button>
