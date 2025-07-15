@@ -9,7 +9,7 @@ const Footer = () => {
             Made with <span className="text-blue-500">💙</span>
           </p>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            <a href="mailto:hello@saptarshi.xyz?subject=Arcade+Facilitator+Progress+Tracker" className="hover:underline underline-offset-2 text-yellow-600 dark:text-yellow-400 transition-colors">Email Us</a>
+            <a href="mailto:workwitharcadefacilitator@gmail.com?subject=Arcade+Facilitator+Progress+Tracker" className="hover:underline underline-offset-2 text-yellow-600 dark:text-yellow-400 transition-colors">Email Us</a>
             <span className="mx-2">|</span>
             <span>© 2025</span>
 
